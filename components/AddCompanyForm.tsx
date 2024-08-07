@@ -31,7 +31,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-
+import { ImagePlus, X } from "lucide-react";
+import { UploadButton } from "./uploadthing";
+import { useState } from "react";
+import { ImageType } from "@prisma/client";
+import Image from "next/image";
+import axios from "axios";
 export const DAY_HOURS = [
   "closed",
   "open 24 hours",
@@ -86,6 +91,12 @@ export const DAY_HOURS = [
 ];
 
 export default function AddCompanyForm() {
+  const [selectedLogo, setSelectedLogo] = useState<ImageType>();
+  const [selectedImage, setSelectedImage] = useState<ImageType>();
+  console.log("SELECTEDLOGO>>>", selectedLogo);
+  console.log("SELECTEDIMG>>>", selectedImage);
+
+  const [isImageLoading, setIsImageLoading] = useState(false);
   const form = useForm<z.infer<typeof AddCompanySchema>>({
     resolver: zodResolver(AddCompanySchema),
     defaultValues: {
@@ -103,6 +114,8 @@ export default function AddCompanyForm() {
         { day: "friday", open: "", closed: "" },
         { day: "saturday", open: "", closed: "" },
       ],
+      logo: undefined,
+      image: undefined,
     },
   });
   const { fields, append, remove } = useFieldArray({
@@ -112,6 +125,14 @@ export default function AddCompanyForm() {
   const onSubmit = async (data: z.infer<typeof AddCompanySchema>) => {
     console.log("DATA>>>>", data);
   };
+
+  async function handleDeleteImage(img: ImageType) {
+    console.log("imgToDelete>>>>", img);
+    await axios.post("/api/uploadthing/delete", {
+      img,
+    });
+  }
+  console.log("FORM-WATCH>>", form.watch());
 
   return (
     <Form {...form}>
@@ -256,9 +277,101 @@ export default function AddCompanyForm() {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="logo"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="logo">Company logo</FormLabel>
+              <FormControl>
+                <div className="flex flex-col items-start">
+                  {selectedLogo ? (
+                    <div className="relative size-28">
+                      <X
+                        onClick={() => {
+                          handleDeleteImage(selectedLogo);
+                          setSelectedLogo(undefined);
+                          form.setValue("logo", undefined);
+                        }}
+                        className="absolute top-1 right-1 text-red-500 z-30 cursor-pointer hover:scale-105 hover:text-red-700"
+                      />
+                      <Image src={selectedLogo.url} alt="company logo" fill />
+                    </div>
+                  ) : (
+                    <>
+                      <ImagePlus className="size-14 dark:text-white" />
+                      <UploadButton
+                        className="mt-4 ut-button:bg-[#1AB266] ut-button:ut-readying:bg-[#1AB266]/50 ut-button:text-black ut-allowed-content:hidden"
+                        endpoint="imageUploader"
+                        onClientUploadComplete={(res) => {
+                          setSelectedLogo(res[0]);
+                          field.onChange(res[0]);
+                          setIsImageLoading(false);
+                        }}
+                        onUploadError={(error) => {
+                          alert(`ERROR! ${error.message}`);
+                        }}
+                        onUploadProgress={() => {
+                          setIsImageLoading(true);
+                        }}
+                      />
+                    </>
+                  )}
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="image"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="image">Company featured image</FormLabel>
+              <FormControl>
+                <div className="flex flex-col items-start">
+                  {selectedImage ? (
+                    <div className="relative size-28">
+                      <X
+                        onClick={() => {
+                          handleDeleteImage(selectedImage);
+                          setSelectedImage(undefined);
+                          form.setValue("image", undefined);
+                        }}
+                        className="absolute top-1 right-1 text-red-500 z-30 cursor-pointer hover:scale-105 hover:text-red-700"
+                      />
+                      <Image src={selectedImage.url} alt="company logo" fill />
+                    </div>
+                  ) : (
+                    <>
+                      <ImagePlus className="size-14 dark:text-white" />
+                      <UploadButton
+                        className="mt-4 ut-button:bg-[#1AB266] ut-button:ut-readying:bg-[#1AB266]/50 ut-button:text-black ut-allowed-content:hidden"
+                        endpoint="imageUploader"
+                        onClientUploadComplete={(res) => {
+                          setSelectedImage(res[0]);
+                          field.onChange(res[0]);
+                          setIsImageLoading(false);
+                        }}
+                        onUploadError={(error) => {
+                          alert(`ERROR! ${error.message}`);
+                        }}
+                        onUploadProgress={() => {
+                          setIsImageLoading(true);
+                        }}
+                      />
+                    </>
+                  )}
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <div>
-          <Button>Submit</Button>
+          <Button disabled={isImageLoading}>Submit</Button>
         </div>
       </form>
     </Form>

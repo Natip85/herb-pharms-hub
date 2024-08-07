@@ -24,24 +24,28 @@ export const AddCompanySchema = z.object({
       closed: z.string().min(1, { message: "required" }),
     })
   ),
-  // logo: z.object({
-  //   key: z.string(),
-  //   name: z.string(),
-  //   url: z.string(),
-  //   size: z.number(),
-  //   serverData: z.object({
-  //     uploadedBy: z.string(),
-  //   }),
-  // }),
-  // image: z.object({
-  //   key: z.string(),
-  //   name: z.string(),
-  //   url: z.string(),
-  //   size: z.number(),
-  //   serverData: z.object({
-  //     uploadedBy: z.string(),
-  //   }),
-  // }),
+  logo: z
+    .object({
+      key: z.string(),
+      name: z.string(),
+      url: z.string(),
+      size: z.number(),
+      serverData: z.object({
+        uploadedBy: z.string(),
+      }),
+    })
+    .optional(),
+  image: z
+    .object({
+      key: z.string(),
+      name: z.string(),
+      url: z.string(),
+      size: z.number(),
+      serverData: z.object({
+        uploadedBy: z.string(),
+      }),
+    })
+    .optional(),
   // field: z.string(),
   // description: z
   //   .string()
