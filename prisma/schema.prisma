@@ -1,0 +1,70 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  email          String  @unique
+  password       String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  companies      Company[]
+}
+
+model Company {
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  city          String
+  email         String
+  area          String
+  type          String
+  hours         BusinessHours[] 
+  logo          ImageType
+  image         ImageType
+  field         String
+  description   String
+  website       String?
+  phone         String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  userId        String  @db.ObjectId
+  user          User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  products      Product[]
+}
+
+model Product {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  companyId      String  @db.ObjectId
+  company        Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+type ImageType {
+  key          String
+  name         String
+  url          String
+  size         Int
+  serverData   ServerData
+}
+
+type ServerData {
+  uploadedBy  String  
+}
+
+type BusinessHours {
+  day     String
+  open    String
+  closed  String
+}
