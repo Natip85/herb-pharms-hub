@@ -2,6 +2,7 @@
 import * as z from "zod";
 import { AddCompanySchema } from "@/validations";
 import db from "@/db/db";
+import { revalidatePath } from "next/cache";
 
 export async function addCompany(
   userId: string,
@@ -44,5 +45,7 @@ export async function addCompany(
       userId,
     },
   });
+  // revalidatePath("/add-business");
+  // revalidatePath("/my-businesses");
   return { success: "Company form subbmitted successfully" };
 }

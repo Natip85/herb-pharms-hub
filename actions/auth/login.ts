@@ -2,6 +2,7 @@
 import { signIn } from "@/auth";
 import { getUserByEmail } from "@/lib/auth";
 import { LoginSchema } from "@/validations";
+import { revalidatePath } from "next/cache";
 import * as z from "zod";
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
@@ -35,6 +36,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     console.error("SignIn Error:", error);
     return { error: "Invalid credentials at sign-in" };
   }
-
+  revalidatePath("/add-business");
+  revalidatePath("/my-businesses");
   return { success: "Logged in successfully!" };
 };

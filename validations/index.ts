@@ -34,7 +34,8 @@ export const AddCompanySchema = z.object({
         uploadedBy: z.string(),
       }),
     })
-    .optional(),
+    .optional()
+    .nullable(),
   image: z
     .object({
       key: z.string(),
@@ -45,7 +46,8 @@ export const AddCompanySchema = z.object({
         uploadedBy: z.string(),
       }),
     })
-    .optional(),
+    .optional()
+    .nullable(),
   field: z
     .string()
     .min(1, { message: "Company field of business is required" }),
