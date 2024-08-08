@@ -33,9 +33,9 @@ export default function StatementSection() {
       <p>
         <span className="text-[#1AB266] font-semibold">HerbPharmsHub</span>, was
         established in the context of the medical cannabis reform
-        ("medicalization") and operates under a company with licenses from the
-        Ministries of Health and Justice, adhering to stringent security and
-        quality standards.
+        &quot;medicalization&quot; and operates under a company with licenses
+        from the Ministries of Health and Justice, adhering to stringent
+        security and quality standards.
       </p>
       <div>
         <Button>Search and compare products now!</Button>

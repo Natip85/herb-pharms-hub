@@ -30,7 +30,7 @@ export default async function AddBusinessPage() {
             easily, enter your contact details, and within moments you and your
             company will be exposed to thousands of visitors. After creating
             your business page, send it for admin approval with the click of a
-            button, and that's it!
+            button, and that&apos;s it!
           </p>
           <p>
             Are you a business owner in the cannabis field? Do you want to

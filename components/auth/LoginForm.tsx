@@ -161,7 +161,7 @@ export default function LoginForm() {
       <div>
         {variant === "LOGIN" ? (
           <span className="flex items-center gap-2">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <span
               onClick={toggleVariant}
               className="text-[#1AB266] cursor-pointer"
