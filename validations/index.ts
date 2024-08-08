@@ -16,7 +16,7 @@ export const AddCompanySchema = z.object({
     .min(2, { message: "A minimum of at least 2 characters is required" }),
   email: z.string().email(),
   area: z.string().min(1, { message: "Company location is required" }),
-  type: z.string().min(1, { message: "Company type is required" }),
+  // type: z.string().min(1, { message: "Company type is required" }),
   hours: z.array(
     z.object({
       day: z.string(),
@@ -46,10 +46,22 @@ export const AddCompanySchema = z.object({
       }),
     })
     .optional(),
-  // field: z.string(),
-  // description: z
-  //   .string()
-  //   .min(10, { message: "A minimum of at least 10 characters is required" }),
-  // website: z.string().optional(),
-  // phone: z.string().min(10, { message: "A valid phone number is required" }),
+  field: z
+    .string()
+    .min(1, { message: "Company field of business is required" }),
+  description: z
+    .string()
+    .min(10, {
+      message: "Description must be at least 10 characters.",
+    })
+    .max(2000, {
+      message: "Description must not be longer than 2000 characters.",
+    }),
+  website: z.string().url().optional(),
+  phone: z
+    .string()
+    .min(12, {
+      message: "Invalid phone number format",
+    })
+    .max(14, { message: "Invalid phone number format" }),
 });

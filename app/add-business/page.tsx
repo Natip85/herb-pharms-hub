@@ -11,7 +11,7 @@ export default async function AddBusinessPage() {
   const user = await currentUser();
   if (!user) {
     return (
-      <div className="min-h-screen p-4 md:p-10">
+      <div className="min-auto p-4 md:p-10">
         <MaxWidthWrapper className="space-y-8">
           <h1 className="text-2xl md:text-4xl font-bold text-center">
             Add your business to HubPharmsHub
@@ -57,24 +57,8 @@ export default async function AddBusinessPage() {
     );
   }
   return (
-    <div className="min-h-screen p-4 md:p-10">
-      <MaxWidthWrapper className="space-y-8">
-        <h1 className="text-2xl md:text-4xl font-bold text-center">
-          Add your business to HubPharmsHub
-        </h1>
-        <Alert className="flex items-center justify-between">
-          <RocketIcon className="size-4" />
-          <div className="w-full">
-            <AlertTitle>Logged in as {user.email}</AlertTitle>
-            <AlertDescription>
-              Create and submit your account for{" "}
-              <span className="text-[#1AB266]">HerbPharmsHub</span> approval
-            </AlertDescription>
-          </div>
-          <LogoutButton>Logout</LogoutButton>
-        </Alert>
-        <AddCompanyForm />
-      </MaxWidthWrapper>
+    <div className="h-auto p-4 md:p-10">
+      <AddCompanyForm />
     </div>
   );
 }

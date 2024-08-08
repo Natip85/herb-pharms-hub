@@ -28,8 +28,8 @@ export const NAV_ITEMS: NavItem[] = [
   //     ],
   //   },
   {
-    title: "My business",
-    path: "/my-business",
+    title: "My businesses",
+    path: "/my-businesses",
     icon: (props) => <Store {...props} />,
   },
   {
