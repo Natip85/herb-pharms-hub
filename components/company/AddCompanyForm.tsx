@@ -84,7 +84,6 @@ export default function AddCompanyForm() {
   const router = useRouter();
   const { toast } = useToast();
   const user = useCurrentUser();
-  if (!user) return;
   const [selectedLogo, setSelectedLogo] = useState<ImageType>();
   const [selectedImage, setSelectedImage] = useState<ImageType>();
   const [isImageLoading, setIsImageLoading] = useState(false);
@@ -122,7 +121,9 @@ export default function AddCompanyForm() {
     control: form.control,
     name: "hours",
   });
+
   const onSubmit = async (data: z.infer<typeof AddCompanySchema>) => {
+    if (!user) return;
     startTransition(() => {
       if (!user.id) return;
       addCompany(user.id, data)
