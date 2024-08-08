@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import MaxWidthWrapper from "./MaxWidthWrapper";
+import MaxWidthWrapper from "../MaxWidthWrapper";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
@@ -12,8 +12,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import SliderThemeToggle from "./SliderThemeToggle";
+} from "../ui/dropdown-menu";
+import SliderThemeToggle from "../SliderThemeToggle";
 
 export default function Navbar() {
   const scrolled = UseScroll(5);

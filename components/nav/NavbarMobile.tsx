@@ -5,7 +5,7 @@ import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { ReactNode, useEffect, useRef, useState } from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { useTheme } from "next-themes";
 import theme from "tailwindcss/defaultTheme";
 

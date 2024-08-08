@@ -24,10 +24,9 @@ model Company {
   city                String
   email               String
   area                String
-  // type             String
   hours               BusinessHours[] 
-  logo                ImageType
-  image               ImageType
+  logo                ImageType?
+  image               ImageType?
   field               String
   description         String
   website             String?

@@ -7,12 +7,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
+} from "../ui/form";
 import * as z from "zod";
 import { AddCompanySchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 import {
   Table,
   TableBody,
@@ -21,7 +21,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./ui/table";
+} from "../ui/table";
 import {
   Select,
   SelectContent,
@@ -29,7 +29,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "../ui/select";
 import {
   CheckIcon,
   ChevronDown,
@@ -39,13 +39,13 @@ import {
   RocketIcon,
   X,
 } from "lucide-react";
-import { UploadButton } from "./uploadthing";
-import { useState } from "react";
+import { UploadButton } from "../uploadthing";
+import { useState, useTransition } from "react";
 import { Company, ImageType } from "@prisma/client";
 import Image from "next/image";
 import axios from "axios";
 import { City } from "country-state-city";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { DAY_HOURS, DISTRICTS, cn } from "@/lib/utils";
 import {
   Command,
@@ -54,16 +54,18 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "./ui/command";
-import { Textarea } from "./ui/textarea";
-import { PhoneInput } from "./ui/phone-input";
-import MaxWidthWrapper from "./MaxWidthWrapper";
-import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
-import LogoutButton from "./LogoutButton";
+} from "../ui/command";
+import { Textarea } from "../ui/textarea";
+import { PhoneInput } from "../ui/phone-input";
+import MaxWidthWrapper from "../MaxWidthWrapper";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import LogoutButton from "../auth/LogoutButton";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { addCompany } from "@/actions/company/addCompany";
+import { useToast } from "../ui/use-toast";
 const steps = [
   {
     id: "Step 1",
@@ -83,14 +85,18 @@ export default function AddCompanyForm({
 }: {
   company?: Company | null;
 }) {
+  const user = useCurrentUser();
+  if (!user) return;
   const router = useRouter();
+  const { toast } = useToast();
   const [selectedLogo, setSelectedLogo] = useState<ImageType>();
   const [selectedImage, setSelectedImage] = useState<ImageType>();
   const [isImageLoading, setIsImageLoading] = useState(false);
   const [previousStep, setPreviousStep] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
+  const [isPending, startTransition] = useTransition();
+
   const delta = currentStep - previousStep;
-  const user = useCurrentUser();
   const homeCities = City.getCitiesOfCountry("IL");
   const form = useForm<z.infer<typeof AddCompanySchema>>({
     resolver: zodResolver(AddCompanySchema),
@@ -121,7 +127,28 @@ export default function AddCompanyForm({
     name: "hours",
   });
   const onSubmit = async (data: z.infer<typeof AddCompanySchema>) => {
-    console.log("DATA>>>>", data);
+    startTransition(() => {
+      if (!user.id) return;
+      addCompany(user.id, data)
+        .then((data) => {
+          if (data.error) {
+            toast({
+              title: "Error",
+              description: `${data.error}`,
+              variant: "destructive",
+            });
+            setCurrentStep(0);
+            router.refresh();
+          } else {
+            toast({
+              title: "Success",
+              description: `${data.success}`,
+              variant: "success",
+            });
+          }
+        })
+        .catch(() => console.log("Something went wrong at login"));
+    });
   };
 
   async function handleDeleteImage(img: ImageType) {
@@ -683,9 +710,9 @@ export default function AddCompanyForm({
               </div>
             )}
             {currentStep === 3 && (
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-8">
                 <h2 className="text-2xl md:text-4xl font-semibold leading-7">
-                  Complete
+                  Business submitted successfully!
                 </h2>
                 <p className="text-sm leading-6 text-muted-foreground">
                   Thank you for your submission! Your company detials have been
@@ -695,6 +722,7 @@ export default function AddCompanyForm({
                   issues with your request, missing documents and next steps.
                 </p>
                 <Button
+                  type="button"
                   onClick={() => router.push("/my-businesses")}
                   className="w-fit"
                 >

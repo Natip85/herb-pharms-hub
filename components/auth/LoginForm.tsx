@@ -12,15 +12,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+} from "../ui/form";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import { ArrowRight, Loader2 } from "lucide-react";
-import { DialogDescription, DialogTitle } from "./ui/dialog";
-import { register } from "@/actions/register";
-import { useToast } from "./ui/use-toast";
+import { DialogDescription, DialogTitle } from "../ui/dialog";
+import { register } from "@/actions/auth/register";
+import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
-import { login } from "@/actions/login";
+import { login } from "@/actions/auth/login";
 
 type UserVariant = "LOGIN" | "REGISTER";
 

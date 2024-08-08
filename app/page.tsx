@@ -1,9 +1,9 @@
-import DirectionHoverCard from "@/components/DirectionHoverCard";
-import FAQAccordion from "@/components/FAQAccordion";
-import HeroTextLoop from "@/components/HeroTextLoop";
-import HeroVideo from "@/components/HeroVideo";
-import StatementSection from "@/components/StatementSection";
-import ThreeDCarousel from "@/components/ThreeDCarousel";
+import DirectionHoverCard from "@/components/homePage/DirectionHoverCard";
+import FAQAccordion from "@/components/homePage/FAQAccordion";
+import HeroTextLoop from "@/components/homePage/HeroTextLoop";
+import HeroVideo from "@/components/homePage/HeroVideo";
+import StatementSection from "@/components/homePage/StatementSection";
+import ThreeDCarousel from "@/components/homePage/ThreeDCarousel";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 const words = [

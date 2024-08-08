@@ -1,6 +1,6 @@
-import AddCompanyForm from "@/components/AddCompanyForm";
-import LoginButton from "@/components/LoginButton";
-import LogoutButton from "@/components/LogoutButton";
+import AddCompanyForm from "@/components/company/AddCompanyForm";
+import LoginButton from "@/components/auth/LoginButton";
+import LogoutButton from "@/components/auth/LogoutButton";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";

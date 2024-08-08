@@ -1,12 +1,12 @@
 "use client";
 import Image from "next/image";
-import MaxWidthWrapper from "./MaxWidthWrapper";
+import MaxWidthWrapper from "../MaxWidthWrapper";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "./ui/accordion";
+} from "../ui/accordion";
 
 export default function FAQAccordion() {
   return (
