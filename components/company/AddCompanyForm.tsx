@@ -80,15 +80,11 @@ const steps = [
   { id: "Step 3", name: "Submission review" },
   { id: "Step 4", name: "Complete" },
 ];
-export default function AddCompanyForm({
-  company,
-}: {
-  company?: Company | null;
-}) {
-  const user = useCurrentUser();
-  if (!user) return;
+export default function AddCompanyForm() {
   const router = useRouter();
   const { toast } = useToast();
+  const user = useCurrentUser();
+  if (!user) return;
   const [selectedLogo, setSelectedLogo] = useState<ImageType>();
   const [selectedImage, setSelectedImage] = useState<ImageType>();
   const [isImageLoading, setIsImageLoading] = useState(false);
