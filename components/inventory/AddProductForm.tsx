@@ -307,16 +307,16 @@ export default function AddProductForm({
                         }}
                         className={cn("w-full")}
                       />
-                      <div className="flex flex-wrap gap-2">
-                        <ol className="flex w-fit items-center gap-3">
+                      <div className="flex flex-wrap">
+                        <ol className="flex w-fit items-center gap-1">
                           {selectedTHCLevels.map((value, index) => (
                             <div key={index} className="flex">
-                              <li className="flex h-8 w-fit items-center justify-between rounded-md border px-3">
-                                <span>{value}</span>
-                                <span>%</span>
+                              <li className="flex h-6 w-fit items-center justify-between rounded-md border px-1">
+                                <span className="text-xs">{value}</span>
+                                <span className="text-xs">%</span>
                               </li>
                               {index < selectedTHCLevels.length - 1 && (
-                                <span className="ml-3 flex items-center justify-center">
+                                <span className="ml-1 flex items-center justify-center">
                                   -
                                 </span>
                               )}
@@ -350,16 +350,16 @@ export default function AddProductForm({
                         }}
                         className={cn("w-full")}
                       />
-                      <div className="flex flex-wrap gap-2">
-                        <ol className="flex w-fit items-center gap-3">
+                      <div className="flex flex-wrap">
+                        <ol className="flex w-fit items-center gap-1">
                           {selectedCBDLevels.map((value, index) => (
                             <div key={index} className="flex">
-                              <li className="flex h-8 w-fit items-center justify-between rounded-md border px-3">
-                                <span>{value}</span>
-                                <span>%</span>
+                              <li className="flex h-6 w-fit items-center justify-between rounded-md border px-1">
+                                <span className="text-xs">{value}</span>
+                                <span className="text-xs">%</span>
                               </li>
                               {index < selectedCBDLevels.length - 1 && (
-                                <span className="ml-3 flex items-center justify-center">
+                                <span className="ml-1 flex items-center justify-center">
                                   -
                                 </span>
                               )}
