@@ -47,6 +47,7 @@ import {
   CommandItem,
   CommandList,
 } from "../ui/command";
+import axios from "axios";
 
 interface AddProductFormProps {
   product?: Product;
@@ -62,6 +63,7 @@ export default function AddProductForm({
     useState<ImageType[]>();
   const [selectedTHCLevels, setSelectedTHCLevels] = useState([0, 0]);
   const [selectedCBDLevels, setSelectedCBDLevels] = useState([0, 0]);
+  const [isImageLoading, setIsImageLoading] = useState(false);
   const countries = Country.getAllCountries();
 
   const handleTHCLevelChange = (newValues: any) => {
@@ -80,17 +82,22 @@ export default function AddProductForm({
       price: 0,
       THCLevel: undefined,
       CBDLevel: undefined,
-      grower: undefined,
+      grower: "",
       brand: "",
       madeIn: "",
-      parent1: undefined,
-      parent2: undefined,
+      parent1: "",
+      parent2: "",
       cultivationMethod: "",
     },
   });
   const onSubmit = async (data: z.infer<typeof AddProductSchema>) => {
     console.log("DATA>>>", data);
   };
+  async function handleDeleteImage(img: ImageType) {
+    await axios.post("/api/uploadthing/delete", {
+      img,
+    });
+  }
   console.log(form.watch());
 
   return (
@@ -106,7 +113,7 @@ export default function AddProductForm({
       </DialogHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid h-[50vh] grid-cols-2 gap-3 overflow-y-auto p-2">
+          <div className="grid h-[50vh] grid-cols-2 gap-5 overflow-y-auto p-2">
             <FormField
               control={form.control}
               name="featuredImage"
@@ -120,16 +127,16 @@ export default function AddProductForm({
                           <X
                             onClick={() => {
                               // handleDeleteImage(selectedLogo);
-                              // setSelectedLogo(undefined);
-                              // form.setValue("logo", undefined);
+                              setSelectedFeaturedImage(undefined);
+                              form.setValue("featuredImage", undefined);
                             }}
                             className="absolute right-1 top-1 z-30 cursor-pointer text-red-500 hover:scale-105 hover:text-red-700"
                           />
-                          {/* <Image
-                            src={selectedLogo.url}
+                          <Image
+                            src={selectedFeaturedImage.url}
                             alt="company logo"
                             fill
-                          /> */}
+                          />
                           image hereeee
                         </div>
                       ) : (
@@ -139,15 +146,15 @@ export default function AddProductForm({
                             className="mt-4 ut-button:bg-[#1AB266] ut-button:text-black ut-allowed-content:hidden ut-button:ut-readying:bg-[#1AB266]/50"
                             endpoint="imageUploader"
                             onClientUploadComplete={(res) => {
-                              // setSelectedLogo(res[0]);
+                              setSelectedFeaturedImage(res[0]);
                               field.onChange(res[0]);
-                              // setIsImageLoading(false);
+                              setIsImageLoading(false);
                             }}
                             onUploadError={(error) => {
                               alert(`ERROR! ${error.message}`);
                             }}
                             onUploadProgress={() => {
-                              // setIsImageLoading(true);
+                              setIsImageLoading(true);
                             }}
                           />
                         </div>
@@ -312,8 +319,8 @@ export default function AddProductForm({
                           {selectedTHCLevels.map((value, index) => (
                             <div key={index} className="flex">
                               <li className="flex h-6 w-fit items-center justify-between rounded-md border px-1">
-                                <span className="text-xs">{value}</span>
-                                <span className="text-xs">%</span>
+                                <span className="text-sm">{value}</span>
+                                <span className="text-sm">%</span>
                               </li>
                               {index < selectedTHCLevels.length - 1 && (
                                 <span className="ml-1 flex items-center justify-center">
@@ -355,8 +362,8 @@ export default function AddProductForm({
                           {selectedCBDLevels.map((value, index) => (
                             <div key={index} className="flex">
                               <li className="flex h-6 w-fit items-center justify-between rounded-md border px-1">
-                                <span className="text-xs">{value}</span>
-                                <span className="text-xs">%</span>
+                                <span className="text-sm">{value}</span>
+                                <span className="text-sm">%</span>
                               </li>
                               {index < selectedCBDLevels.length - 1 && (
                                 <span className="ml-1 flex items-center justify-center">
@@ -401,25 +408,12 @@ export default function AddProductForm({
                 </FormItem>
               )}
             />
-            {/* <FormField
-              control={form.control}
-              name="madeIn"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="madeIn">Made in</FormLabel>
-                  <FormControl>
-                    <Input id="madeIn" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
             <FormField
               control={form.control}
               name="madeIn"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Made in</FormLabel>
+                  <FormLabel className="mb-2 mt-1">Made in</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -482,7 +476,7 @@ export default function AddProductForm({
               control={form.control}
               name="price"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="m-0 p-0">
                   <FormLabel htmlFor="price">Price</FormLabel>
                   <FormControl>
                     <div className="relative">
@@ -537,7 +531,9 @@ export default function AddProductForm({
             />
           </div>
           <DialogFooter className="p-2">
-            <Button type="submit">Submit</Button>
+            <Button disabled={isImageLoading} type="submit">
+              Submit
+            </Button>
           </DialogFooter>
         </form>
       </Form>
