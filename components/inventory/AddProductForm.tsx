@@ -73,7 +73,7 @@ export default function AddProductForm({
   console.log(form.watch());
 
   return (
-    <DialogContent className="w-[90%] max-w-[900px]">
+    <DialogContent className="w-[90%] max-w-[800px]">
       <DialogHeader className="px-2">
         <DialogTitle>
           Add new inventory to{" "}
@@ -85,53 +85,7 @@ export default function AddProductForm({
       </DialogHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid h-[60vh] grid-cols-2 gap-2 overflow-y-auto p-2">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="name">Name</FormLabel>
-                  <FormControl>
-                    <Input id="name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div>
-              <FormLabel htmlFor="strain">Strain</FormLabel>
-
-              {STRAINS.map((item) => (
-                <FormField
-                  key={item.id}
-                  control={form.control}
-                  name="strain"
-                  render={({ field }) => (
-                    <FormItem className="ml-4 flex items-center gap-3">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value?.includes(item.id)}
-                          onCheckedChange={(checked) => {
-                            return checked
-                              ? field.onChange([...field.value, item.id])
-                              : field.onChange(
-                                  field.value?.filter(
-                                    (value) => value !== item.id,
-                                  ),
-                                );
-                          }}
-                        />
-                      </FormControl>
-                      <div className="flex flex-col gap-2">
-                        <FormLabel htmlFor="strain">{item.label}</FormLabel>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-              ))}
-            </div>
+          <div className="grid h-[50vh] grid-cols-2 gap-2 overflow-y-auto p-2">
             <FormField
               control={form.control}
               name="featuredImage"
@@ -234,6 +188,53 @@ export default function AddProductForm({
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="name">Name</FormLabel>
+                  <FormControl>
+                    <Input id="name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div>
+              <FormLabel htmlFor="strain">Strain</FormLabel>
+
+              {STRAINS.map((item) => (
+                <FormField
+                  key={item.id}
+                  control={form.control}
+                  name="strain"
+                  render={({ field }) => (
+                    <FormItem className="ml-4 flex items-center gap-3">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value?.includes(item.id)}
+                          onCheckedChange={(checked) => {
+                            return checked
+                              ? field.onChange([...field.value, item.id])
+                              : field.onChange(
+                                  field.value?.filter(
+                                    (value) => value !== item.id,
+                                  ),
+                                );
+                          }}
+                        />
+                      </FormControl>
+                      <div className="flex flex-col gap-2">
+                        <FormLabel htmlFor="strain">{item.label}</FormLabel>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              ))}
+            </div>
+
             <FormField
               control={form.control}
               name="price"
