@@ -22,13 +22,32 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../ui/dialog";
-import { ImagePlus, X } from "lucide-react";
+import { CheckIcon, ChevronDown, ImagePlus, X } from "lucide-react";
 import Image from "next/image";
 import { UploadButton } from "../uploadthing";
 import { useState } from "react";
 import { Slider } from "../ui/slider";
-import { STRAINS, cn } from "@/lib/utils";
+import { CULTIVATION_METHODS, STRAINS, cn } from "@/lib/utils";
 import { Checkbox } from "../ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { Country } from "country-state-city";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "../ui/command";
+
 interface AddProductFormProps {
   product?: Product;
   company: Company;
@@ -43,6 +62,7 @@ export default function AddProductForm({
     useState<ImageType[]>();
   const [selectedTHCLevels, setSelectedTHCLevels] = useState([0, 0]);
   const [selectedCBDLevels, setSelectedCBDLevels] = useState([0, 0]);
+  const countries = Country.getAllCountries();
 
   const handleTHCLevelChange = (newValues: any) => {
     setSelectedTHCLevels(newValues);
@@ -56,6 +76,7 @@ export default function AddProductForm({
       name: "",
       strain: [],
       featuredImage: undefined,
+      galleryImages: [],
       price: 0,
       THCLevel: undefined,
       CBDLevel: undefined,
@@ -77,7 +98,7 @@ export default function AddProductForm({
       <DialogHeader className="px-2">
         <DialogTitle>
           Add new inventory to{" "}
-          <span className="text-2xl text-[#1AB266]">{company.name}</span>
+          <span className="text-[#1AB266]">{company.name}</span>
         </DialogTitle>
         <DialogDescription>
           Add new inventory to your company. This will be visible to all users.
@@ -85,7 +106,7 @@ export default function AddProductForm({
       </DialogHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid h-[50vh] grid-cols-2 gap-2 overflow-y-auto p-2">
+          <div className="grid h-[50vh] grid-cols-2 gap-3 overflow-y-auto p-2">
             <FormField
               control={form.control}
               name="featuredImage"
@@ -192,7 +213,7 @@ export default function AddProductForm({
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="col-span-2">
                   <FormLabel htmlFor="name">Name</FormLabel>
                   <FormControl>
                     <Input id="name" {...field} />
@@ -210,7 +231,7 @@ export default function AddProductForm({
                   control={form.control}
                   name="strain"
                   render={({ field }) => (
-                    <FormItem className="ml-4 flex items-center gap-3">
+                    <FormItem className="mt-2 flex items-center gap-3">
                       <FormControl>
                         <Checkbox
                           checked={field.value?.includes(item.id)}
@@ -234,34 +255,38 @@ export default function AddProductForm({
                 />
               ))}
             </div>
-
             <FormField
               control={form.control}
-              name="price"
+              name="cultivationMethod"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="price">Price</FormLabel>
+                  <FormLabel htmlFor="cultivationMethod">
+                    Cultivation method
+                  </FormLabel>
                   <FormControl>
-                    <div className="relative">
-                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                        <span className="text-muted-foreground">$</span>
-                      </div>
-                      <Input
-                        id="price"
-                        type="number"
-                        min={0}
-                        max={10000}
-                        step={0.01}
-                        placeholder="0.00"
-                        className="pl-9"
-                        {...field}
-                      />
-                    </div>
+                    <Select
+                      defaultValue={form.getValues("cultivationMethod")}
+                      onValueChange={(value) => field.onChange(value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select cultivation type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {CULTIVATION_METHODS.map((method) => (
+                            <SelectItem key={method.id} value={method.label}>
+                              {method.label}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="THCLevel"
@@ -353,7 +378,9 @@ export default function AddProductForm({
               name="grower"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="grower">Grower</FormLabel>
+                  <FormLabel htmlFor="grower">
+                    Grower <span className="text-xs">(optional)</span>
+                  </FormLabel>
                   <FormControl>
                     <Input id="grower" {...field} />
                   </FormControl>
@@ -374,7 +401,7 @@ export default function AddProductForm({
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="madeIn"
               render={({ field }) => (
@@ -386,15 +413,93 @@ export default function AddProductForm({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name="madeIn"
               render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>Made in</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "w-full justify-between",
+                            !field.value && "text-muted-foreground",
+                          )}
+                        >
+                          {field.value
+                            ? countries?.find(
+                                (country) => country.name === field.value,
+                              )?.name
+                            : "Select a country"}
+                          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="p-0">
+                      <Command>
+                        <CommandInput
+                          placeholder="Search countries..."
+                          className="h-9"
+                        />
+                        <CommandList>
+                          <CommandEmpty>No countries found.</CommandEmpty>
+                          <CommandGroup>
+                            {countries?.map((country) => (
+                              <CommandItem
+                                value={country.name}
+                                key={country.name}
+                                onSelect={() => {
+                                  // form.setValue("city", city.name);
+                                  field.onChange(country.name);
+                                }}
+                              >
+                                {country.name}
+                                <CheckIcon
+                                  className={cn(
+                                    "ml-auto h-4 w-4",
+                                    country.name === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0",
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="madeIn">Made in</FormLabel>
+                  <FormLabel htmlFor="price">Price</FormLabel>
                   <FormControl>
-                    <Input id="madeIn" {...field} />
+                    <div className="relative">
+                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                        <span className="text-muted-foreground">$</span>
+                      </div>
+                      <Input
+                        id="price"
+                        type="number"
+                        min={0}
+                        max={10000}
+                        step={0.01}
+                        placeholder="0.00"
+                        className="pl-9"
+                        {...field}
+                      />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -405,7 +510,9 @@ export default function AddProductForm({
               name="parent1"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="parent1">Parent strain #1</FormLabel>
+                  <FormLabel htmlFor="parent1">
+                    Parent #1 <span className="text-xs">(optional)</span>
+                  </FormLabel>
                   <FormControl>
                     <Input id="parent1" {...field} />
                   </FormControl>
@@ -418,7 +525,9 @@ export default function AddProductForm({
               name="parent2"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="parent2">Parent strain #2</FormLabel>
+                  <FormLabel htmlFor="parent2">
+                    Parent #2 <span className="text-xs">(optional)</span>
+                  </FormLabel>
                   <FormControl>
                     <Input id="parent2" {...field} />
                   </FormControl>
@@ -426,49 +535,7 @@ export default function AddProductForm({
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="cultivationMethod"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="cultivationMethod">
-                    Cultivation method
-                  </FormLabel>
-                  <FormControl>
-                    <Input id="cultivationMethod" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </div>
-          {/* <div className="grid w-full max-w-80 gap-4 rounded-[12px] border border-[#14424C]/20 bg-white p-4">
-            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              Preço
-            </label>
-            <Slider
-              defaultValue={[0, 30]}
-              minStepsBetweenThumbs={1}
-              max={30}
-              min={0}
-              step={0.1}
-              onValueChange={handleValueChange}
-              className={cn("w-full")}
-            />
-            <div className="flex flex-wrap gap-2">
-              <ol className="flex w-full items-center gap-3">
-                {localValues.map((_, index) => (
-                  <li
-                    key={index}
-                    className="flex h-10 w-full items-center justify-between rounded-md border px-3"
-                  >
-                    <span>Km</span>
-                    <span>{localValues[index]}</span>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </div> */}
           <DialogFooter className="p-2">
             <Button type="submit">Submit</Button>
           </DialogFooter>

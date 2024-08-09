@@ -88,3 +88,33 @@ export const STRAINS = [
     label: "Hybrid",
   },
 ] as const;
+export const CULTIVATION_METHODS = [
+  {
+    id: "indoor",
+    label: "Indoor",
+  },
+  {
+    id: "outdoor",
+    label: "Outdoor",
+  },
+  {
+    id: "greenhouse",
+    label: "Greenhouse",
+  },
+  {
+    id: "light dep",
+    label: "Light Dep",
+  },
+  {
+    id: "hydroponic",
+    label: "Hydroponic",
+  },
+  {
+    id: "organic",
+    label: "Organic",
+  },
+  {
+    id: "aquaponic",
+    label: "Aquaponic",
+  },
+];
