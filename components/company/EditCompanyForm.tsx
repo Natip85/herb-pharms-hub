@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { DAY_HOURS, DISTRICTS, cn } from "@/lib/utils";
+import { COMPANY_FIELDS, DAY_HOURS, DISTRICTS, cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { CheckIcon, ChevronDown, ImagePlus, Loader2, X } from "lucide-react";
@@ -56,6 +56,7 @@ import axios from "axios";
 import { deleteCompany } from "@/actions/company/deleteCompany";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -70,10 +71,10 @@ export default function EditCompanyForm({ company }: { company: Company }) {
   const [isPending, startTransition] = useTransition();
   const homeCities = City.getCitiesOfCountry("IL");
   const [selectedLogo, setSelectedLogo] = useState<ImageType | null>(
-    company.logo
+    company.logo,
   );
   const [selectedImage, setSelectedImage] = useState<ImageType | null>(
-    company.image
+    company.image,
   );
   const [isImageLoading, setIsImageLoading] = useState(false);
 
@@ -98,8 +99,6 @@ export default function EditCompanyForm({ company }: { company: Company }) {
     name: "hours",
   });
   const onSubmit = async (data: z.infer<typeof AddCompanySchema>) => {
-    console.log("DATA>>>", data);
-
     startTransition(() => {
       editCompany(company.id, data)
         .then((data) => {
@@ -153,10 +152,9 @@ export default function EditCompanyForm({ company }: { company: Company }) {
     });
   }
   form.watch();
-  console.log("WATCH>>>>", form.watch());
   return (
     <MaxWidthWrapper className="p-4 md:p-10">
-      <h1 className="text-2xl md:text-4xl font-semibold text-center">
+      <h1 className="text-center text-2xl font-semibold md:text-4xl">
         Edit company detials
       </h1>
       <Form {...form}>
@@ -240,19 +238,19 @@ export default function EditCompanyForm({ company }: { company: Company }) {
                         role="combobox"
                         className={cn(
                           "w-full justify-between",
-                          !field.value && "text-muted-foreground"
+                          !field.value && "text-muted-foreground",
                         )}
                       >
                         {field.value
                           ? homeCities?.find(
-                              (city) => city.name === field.value
+                              (city) => city.name === field.value,
                             )?.name
                           : "Select a city"}
                         <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className=" p-0">
+                  <PopoverContent className="p-0">
                     <Command>
                       <CommandInput
                         placeholder="Search cities..."
@@ -275,7 +273,7 @@ export default function EditCompanyForm({ company }: { company: Company }) {
                                   "ml-auto h-4 w-4",
                                   city.name === field.value
                                     ? "opacity-100"
-                                    : "opacity-0"
+                                    : "opacity-0",
                                 )}
                               />
                             </CommandItem>
@@ -312,7 +310,7 @@ export default function EditCompanyForm({ company }: { company: Company }) {
               control={form.control}
               name="logo"
               render={({ field }) => (
-                <FormItem className="flex-1 flex flex-col items-center">
+                <FormItem className="flex flex-1 flex-col items-center">
                   <FormLabel htmlFor="logo">Company logo</FormLabel>
                   <FormControl>
                     <div className="flex flex-col items-start">
@@ -324,7 +322,7 @@ export default function EditCompanyForm({ company }: { company: Company }) {
                               setSelectedLogo(undefined || null);
                               form.setValue("logo", undefined);
                             }}
-                            className="absolute top-1 right-1 text-red-500 z-30 cursor-pointer hover:scale-105 hover:text-red-700"
+                            className="absolute right-1 top-1 z-30 cursor-pointer text-red-500 hover:scale-105 hover:text-red-700"
                           />
                           <Image
                             src={selectedLogo.url}
@@ -336,7 +334,7 @@ export default function EditCompanyForm({ company }: { company: Company }) {
                         <div className="flex flex-col items-center">
                           <ImagePlus className="size-14 dark:text-white" />
                           <UploadButton
-                            className="mt-4 ut-button:bg-[#1AB266] ut-button:ut-readying:bg-[#1AB266]/50 ut-button:text-black ut-allowed-content:hidden"
+                            className="mt-4 ut-button:bg-[#1AB266] ut-button:text-black ut-allowed-content:hidden ut-button:ut-readying:bg-[#1AB266]/50"
                             endpoint="imageUploader"
                             onClientUploadComplete={(res) => {
                               setSelectedLogo(res[0]);
@@ -362,7 +360,7 @@ export default function EditCompanyForm({ company }: { company: Company }) {
               control={form.control}
               name="image"
               render={({ field }) => (
-                <FormItem className="flex-1 flex flex-col items-center">
+                <FormItem className="flex flex-1 flex-col items-center">
                   <FormLabel htmlFor="image">Featured image</FormLabel>
                   <FormControl>
                     <div className="flex flex-col items-start">
@@ -374,7 +372,7 @@ export default function EditCompanyForm({ company }: { company: Company }) {
                               setSelectedImage(undefined || null);
                               form.setValue("image", undefined);
                             }}
-                            className="absolute top-1 right-1 text-red-500 z-30 cursor-pointer hover:scale-105 hover:text-red-700"
+                            className="absolute right-1 top-1 z-30 cursor-pointer text-red-500 hover:scale-105 hover:text-red-700"
                           />
                           <Image
                             src={selectedImage.url}
@@ -386,7 +384,7 @@ export default function EditCompanyForm({ company }: { company: Company }) {
                         <div className="flex flex-col items-center">
                           <ImagePlus className="size-14 dark:text-white" />
                           <UploadButton
-                            className="mt-4 ut-button:bg-[#1AB266] ut-button:ut-readying:bg-[#1AB266]/50 ut-button:text-black ut-allowed-content:hidden"
+                            className="mt-4 ut-button:bg-[#1AB266] ut-button:text-black ut-allowed-content:hidden ut-button:ut-readying:bg-[#1AB266]/50"
                             endpoint="imageUploader"
                             onClientUploadComplete={(res) => {
                               setSelectedImage(res[0]);
@@ -490,7 +488,23 @@ export default function EditCompanyForm({ company }: { company: Company }) {
               <FormItem>
                 <FormLabel htmlFor="field">Company field of business</FormLabel>
                 <FormControl>
-                  <Input id="field" {...field} />
+                  <Select
+                    defaultValue={form.getValues("field")}
+                    onValueChange={(value) => form.setValue("field", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select company field" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {COMPANY_FIELDS.map((field) => (
+                          <SelectItem key={field} value={field}>
+                            {field}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -535,7 +549,7 @@ export default function EditCompanyForm({ company }: { company: Company }) {
             <Button disabled={isImageLoading || isPending}>
               {isPending ? (
                 <>
-                  <Loader2 className="animate-spin mr-2" /> Updating company
+                  <Loader2 className="mr-2 animate-spin" /> Updating company
                   details
                 </>
               ) : (
@@ -554,7 +568,8 @@ export default function EditCompanyForm({ company }: { company: Company }) {
                     data, these changes cannot be reveresed.
                   </DialogDescription>
                 </DialogHeader>
-                <DialogFooter>
+                <DialogFooter className="flex gap-5">
+                  <DialogClose>Cancel</DialogClose>
                   <Button
                     onClick={() => handleDeleteCompany(company.id)}
                     type="button"
@@ -562,11 +577,11 @@ export default function EditCompanyForm({ company }: { company: Company }) {
                   >
                     {isPending ? (
                       <>
-                        <Loader2 className="animate-spin mr-2" /> Deleting
+                        <Loader2 className="mr-2 animate-spin" /> Deleting
                         company
                       </>
                     ) : (
-                      "Delete company"
+                      "Delete"
                     )}
                   </Button>
                 </DialogFooter>

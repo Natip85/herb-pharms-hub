@@ -22,7 +22,7 @@ export const AddCompanySchema = z.object({
       day: z.string(),
       open: z.string().min(1, { message: "required" }),
       closed: z.string().min(1, { message: "required" }),
-    })
+    }),
   ),
   logo: z
     .object({
@@ -66,4 +66,10 @@ export const AddCompanySchema = z.object({
       message: "Invalid phone number format",
     })
     .max(14, { message: "Invalid phone number format" }),
+});
+
+export const AddProductSchema = z.object({
+  name: z
+    .string()
+    .min(2, { message: "A minimum of at least 2 characters is required" }),
 });

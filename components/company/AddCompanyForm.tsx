@@ -46,7 +46,7 @@ import Image from "next/image";
 import axios from "axios";
 import { City } from "country-state-city";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { DAY_HOURS, DISTRICTS, cn } from "@/lib/utils";
+import { COMPANY_FIELDS, DAY_HOURS, DISTRICTS, cn } from "@/lib/utils";
 import {
   Command,
   CommandEmpty,
@@ -182,10 +182,10 @@ export default function AddCompanyForm() {
 
   return (
     <MaxWidthWrapper className="space-y-8">
-      <h1 className="text-2xl md:text-4xl font-bold text-center">
+      <h1 className="text-center text-2xl font-bold md:text-4xl">
         Add your business to HubPharmsHub
       </h1>
-      <Alert className="flex items-center justify-between max-w-2xl mx-auto">
+      <Alert className="mx-auto flex max-w-2xl items-center justify-between">
         <RocketIcon className="size-4" />
         <div className="w-full">
           <AlertTitle>Logged in as {user?.email}</AlertTitle>
@@ -196,7 +196,7 @@ export default function AddCompanyForm() {
         </div>
         <LogoutButton>Logout</LogoutButton>
       </Alert>
-      <section className="inset-0 flex flex-col justify-between p-2 gap-10">
+      <section className="inset-0 flex flex-col justify-between gap-10 p-2">
         <nav aria-label="Progress">
           <ul
             role="list"
@@ -206,14 +206,14 @@ export default function AddCompanyForm() {
               <li key={step.name} className="md:flex-1">
                 {currentStep > index ? (
                   <div className="group flex w-full flex-col border-l-4 border-[#1AB266] py-2 pl-4 transition-colors md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
-                    <span className="text-sm font-medium text-[#1AB266] transition-colors ">
+                    <span className="text-sm font-medium text-[#1AB266] transition-colors">
                       {step.id}
                     </span>
                     <span className="text-sm font-medium">{step.name}</span>
                   </div>
                 ) : currentStep === index ? (
                   <div
-                    className="flex w-full flex-col border-l-4 border-[#1AB266] py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4"
+                    className="md:pt-4flex-col flex w-full border-l-4 border-[#1AB266] py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0"
                     aria-current="step"
                   >
                     <span className="text-sm font-medium text-[#1AB266]">
@@ -325,19 +325,19 @@ export default function AddCompanyForm() {
                               role="combobox"
                               className={cn(
                                 "w-full justify-between",
-                                !field.value && "text-muted-foreground"
+                                !field.value && "text-muted-foreground",
                               )}
                             >
                               {field.value
                                 ? homeCities?.find(
-                                    (city) => city.name === field.value
+                                    (city) => city.name === field.value,
                                   )?.name
                                 : "Select a city"}
                               <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
-                        <PopoverContent className=" p-0">
+                        <PopoverContent className="p-0">
                           <Command>
                             <CommandInput
                               placeholder="Search cities..."
@@ -361,7 +361,7 @@ export default function AddCompanyForm() {
                                         "ml-auto h-4 w-4",
                                         city.name === field.value
                                           ? "opacity-100"
-                                          : "opacity-0"
+                                          : "opacity-0",
                                       )}
                                     />
                                   </CommandItem>
@@ -406,7 +406,7 @@ export default function AddCompanyForm() {
                     control={form.control}
                     name="logo"
                     render={({ field }) => (
-                      <FormItem className="flex-1 flex flex-col items-center">
+                      <FormItem className="flex flex-1 flex-col items-center">
                         <FormLabel htmlFor="logo">Company logo</FormLabel>
                         <FormControl>
                           <div className="flex flex-col items-start">
@@ -418,7 +418,7 @@ export default function AddCompanyForm() {
                                     setSelectedLogo(undefined);
                                     form.setValue("logo", undefined);
                                   }}
-                                  className="absolute top-1 right-1 text-red-500 z-30 cursor-pointer hover:scale-105 hover:text-red-700"
+                                  className="absolute right-1 top-1 z-30 cursor-pointer text-red-500 hover:scale-105 hover:text-red-700"
                                 />
                                 <Image
                                   src={selectedLogo.url}
@@ -430,7 +430,7 @@ export default function AddCompanyForm() {
                               <div className="flex flex-col items-center">
                                 <ImagePlus className="size-14 dark:text-white" />
                                 <UploadButton
-                                  className="mt-4 ut-button:bg-[#1AB266] ut-button:ut-readying:bg-[#1AB266]/50 ut-button:text-black ut-allowed-content:hidden"
+                                  className="mt-4 ut-button:bg-[#1AB266] ut-button:text-black ut-allowed-content:hidden ut-button:ut-readying:bg-[#1AB266]/50"
                                   endpoint="imageUploader"
                                   onClientUploadComplete={(res) => {
                                     setSelectedLogo(res[0]);
@@ -456,7 +456,7 @@ export default function AddCompanyForm() {
                     control={form.control}
                     name="image"
                     render={({ field }) => (
-                      <FormItem className="flex-1 flex flex-col items-center">
+                      <FormItem className="flex flex-1 flex-col items-center">
                         <FormLabel htmlFor="image">Featured image</FormLabel>
                         <FormControl>
                           <div className="flex flex-col items-start">
@@ -468,7 +468,7 @@ export default function AddCompanyForm() {
                                     setSelectedImage(undefined);
                                     form.setValue("image", undefined);
                                   }}
-                                  className="absolute top-1 right-1 text-red-500 z-30 cursor-pointer hover:scale-105 hover:text-red-700"
+                                  className="absolute right-1 top-1 z-30 cursor-pointer text-red-500 hover:scale-105 hover:text-red-700"
                                 />
                                 <Image
                                   src={selectedImage.url}
@@ -480,7 +480,7 @@ export default function AddCompanyForm() {
                               <div className="flex flex-col items-center">
                                 <ImagePlus className="size-14 dark:text-white" />
                                 <UploadButton
-                                  className="mt-4 ut-button:bg-[#1AB266] ut-button:ut-readying:bg-[#1AB266]/50 ut-button:text-black ut-allowed-content:hidden"
+                                  className="mt-4 ut-button:bg-[#1AB266] ut-button:text-black ut-allowed-content:hidden ut-button:ut-readying:bg-[#1AB266]/50"
                                   endpoint="imageUploader"
                                   onClientUploadComplete={(res) => {
                                     setSelectedImage(res[0]);
@@ -529,7 +529,7 @@ export default function AddCompanyForm() {
                                 <TableCell>
                                   <Select
                                     defaultValue={form.getValues(
-                                      `hours.${i}.open`
+                                      `hours.${i}.open`,
                                     )}
                                     onValueChange={(value) =>
                                       form.setValue(`hours.${i}.open`, value)
@@ -552,7 +552,7 @@ export default function AddCompanyForm() {
                                 <TableCell>
                                   <Select
                                     defaultValue={form.getValues(
-                                      `hours.${i}.closed`
+                                      `hours.${i}.closed`,
                                     )}
                                     onValueChange={(value) =>
                                       form.setValue(`hours.${i}.closed`, value)
@@ -590,7 +590,25 @@ export default function AddCompanyForm() {
                         Company field of business
                       </FormLabel>
                       <FormControl>
-                        <Input id="field" {...field} />
+                        <Select
+                          defaultValue={form.getValues("field")}
+                          onValueChange={(value) =>
+                            form.setValue("field", value)
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select company field" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              {COMPANY_FIELDS.map((field) => (
+                                <SelectItem key={field} value={field}>
+                                  {field}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -636,7 +654,7 @@ export default function AddCompanyForm() {
             )}
             {currentStep === 2 && (
               <div className="flex flex-col gap-3">
-                <div className="relative w-full h-[50vh]">
+                <div className="relative h-[50vh] w-full">
                   <Image
                     src={selectedImage?.url || ""}
                     alt="company image"
@@ -644,51 +662,51 @@ export default function AddCompanyForm() {
                     className="z-10"
                   />
                 </div>
-                <div className="flex gap-10 items-end mb-5">
+                <div className="mb-5 flex h-32 items-end gap-10">
                   <Image
                     src={selectedLogo?.url || ""}
                     alt="company logo"
                     width={150}
                     height={200}
-                    className=" border border-white shadow-md shadow-black"
+                    className="border border-white shadow-md shadow-black"
                   />
 
-                  <h3 className="text-2xl md:text-4xl font-bold">
+                  <h3 className="text-2xl font-bold md:text-4xl">
                     {form.getValues("name")}
                   </h3>
                 </div>
 
                 <p>
-                  <span className="font-bold ">City:</span>{" "}
+                  <span className="font-bold">City:</span>{" "}
                   {form.getValues("city")}
                 </p>
                 <p>
-                  <span className="font-bold ">District:</span>{" "}
+                  <span className="font-bold">District:</span>{" "}
                   {form.getValues("area")}
                 </p>
                 <p>
-                  <span className="font-bold ">Field:</span>{" "}
+                  <span className="font-bold">Field:</span>{" "}
                   {form.getValues("field")}
                 </p>
                 <p>
-                  <span className="font-bold ">Website:</span>{" "}
+                  <span className="font-bold">Website:</span>{" "}
                   <Link href={form.getValues("website") || ""}>
                     {form.getValues("website")}
                   </Link>
                 </p>
                 <p>
-                  <span className="font-bold ">Phone:</span>{" "}
+                  <span className="font-bold">Phone:</span>{" "}
                   {form.getValues("phone")}
                 </p>
                 <p>
-                  <span className="font-bold ">Email:</span>{" "}
+                  <span className="font-bold">Email:</span>{" "}
                   {form.getValues("email")}
                 </p>
                 <p>
-                  <span className="font-bold ">Description:</span>{" "}
+                  <span className="font-bold">Description:</span>{" "}
                   {form.getValues("description")}
                 </p>
-                <h3 className="mx-auto border-b-[5px] p-1 text-2xl md:text-3xl w-fit">
+                <h3 className="mx-auto w-fit border-b-[5px] p-1 text-2xl md:text-3xl">
                   Business hours
                 </h3>
                 {form.getValues("hours").map((day, i) => {
@@ -708,7 +726,7 @@ export default function AddCompanyForm() {
             )}
             {currentStep === 3 && (
               <div className="flex flex-col gap-8">
-                <h2 className="text-2xl md:text-4xl font-semibold leading-7">
+                <h2 className="text-2xl font-semibold leading-7 md:text-4xl">
                   Business submitted successfully!
                 </h2>
                 <p className="text-sm leading-6 text-muted-foreground">
@@ -720,7 +738,10 @@ export default function AddCompanyForm() {
                 </p>
                 <Button
                   type="button"
-                  onClick={() => router.push("/my-businesses")}
+                  onClick={() => {
+                    router.push("/my-businesses");
+                    router.refresh();
+                  }}
                   className="w-fit"
                 >
                   Go to my businesses
@@ -735,10 +756,10 @@ export default function AddCompanyForm() {
                   onClick={prev}
                   disabled={currentStep === 0}
                   className={cn(
-                    "px-2 py-1 text-sm font-semibold text-[#1AB266] shadow-sm ring-1 ring-inset ring-[#1AB266] hover:bg-[#d3f5e4] ",
+                    "px-2 py-1 text-sm font-semibold text-[#1AB266] shadow-sm ring-1 ring-inset ring-[#1AB266] hover:bg-[#d3f5e4]",
                     {
                       hidden: currentStep === 3,
-                    }
+                    },
                   )}
                 >
                   <ChevronLeft />
@@ -750,10 +771,10 @@ export default function AddCompanyForm() {
                   onClick={next}
                   disabled={currentStep === steps.length - 1 || isImageLoading}
                   className={cn(
-                    "dark:hover:text-black px-2 py-1 text-sm font-semibold text-[#1AB266] shadow-sm ring-1 ring-inset ring-[#1AB266] hover:bg-[#d3f5e4] ",
+                    "px-2 py-1 text-sm font-semibold text-[#1AB266] shadow-sm ring-1 ring-inset ring-[#1AB266] hover:bg-[#d3f5e4] dark:hover:text-black",
                     {
                       hidden: currentStep === 3,
-                    }
+                    },
                   )}
                 >
                   {currentStep === 2 ? "Submit for approval" : <ChevronRight />}

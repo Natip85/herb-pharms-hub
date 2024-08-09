@@ -7,8 +7,6 @@ export default async function EditPage({
   params: { id: string };
 }) {
   const company = await db.company.findUnique({ where: { id } });
-  console.log("ID>>>", id);
-  console.log("COMPNAY>>>", company);
   if (!company) return;
   return (
     <div>

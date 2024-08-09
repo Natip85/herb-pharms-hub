@@ -65,3 +65,12 @@ export const DISTRICTS = [
   "Jerusalem District",
   "Southern District",
 ];
+export const COMPANY_FIELDS = [
+  "Medical Cannabis Pharmacy",
+  "Medical Cannabis Company",
+  "Licensed Cannabis Provider",
+  "Cannabis Growing Farm",
+  "Smoke Accessory Shop",
+  "CBD Company",
+  "Cannabis Technology & Investment Group",
+];

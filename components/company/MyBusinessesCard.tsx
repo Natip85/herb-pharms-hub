@@ -4,9 +4,8 @@ import { Company } from "@prisma/client";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Button, buttonVariants } from "../ui/button";
 import Image from "next/image";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { EditIcon, RocketIcon } from "lucide-react";
 import Link from "next/link";
+import { Badge } from "../ui/badge";
 
 export default function MyBusinessesCard({
   companies,
@@ -14,66 +13,68 @@ export default function MyBusinessesCard({
   companies: Company[];
 }) {
   return (
-    <div className="flex flex-col gap-5 my-5">
+    <div className="my-5 grid grid-cols-1 gap-5 lg:grid-cols-2">
       {companies.map((co) =>
         co.isCompanyVerified ? (
-          <Card key={co.id} className="p-2">
-            <span className="text-[#1AB266]">Active</span>
-            <CardContent className="flex gap-5">
-              <div className="relative size-28">
+          <Card key={co.id} className="flex flex-col justify-between p-2">
+            <CardContent className="flex h-full justify-between gap-5">
+              <Badge variant={"success"} className="size-fit">
+                Active
+              </Badge>
+              <div className="relative h-full flex-1">
                 <Image
                   src={co.logo?.url || ""}
                   alt={co.image?.name || ""}
                   fill
                 />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-1 flex-col">
                 <span className="text-2xl font-semibold">{co.name}</span>
-                <span>{co.description}</span>
+                <span className="line-clamp-5">{co.description}</span>
               </div>
             </CardContent>
-            <CardFooter className="flex gap-3">
+            <div className="my-3 text-sm">{co.field}</div>
+            <CardFooter className="flex gap-3 p-0">
+              <div>
+                <Link
+                  href={`/my-businesses/${co.id}/edit`}
+                  className={buttonVariants({ variant: "outline" })}
+                >
+                  Edit comapny details
+                </Link>
+              </div>
               <Link
-                href={`/my-businesses/${co.id}/edit`}
+                href={`/my-businesses/${co.id}/manage-inventory`}
                 className={buttonVariants()}
               >
-                <EditIcon className="size-4 mr-2" /> Edit
+                Manage inventory
               </Link>
-              <Button>Deploy</Button>
             </CardFooter>
           </Card>
         ) : (
-          <Card key={co.id} className="p-2 space-y-3">
-            <span className="text-destructive">In progress</span>
-
-            <Alert className="flex items-center justify-between w-full bg-[#1AB266]">
-              <RocketIcon className="size-4" />
-              <div className="w-full">
-                <AlertTitle>Awaiting approval</AlertTitle>
-                <AlertDescription>
-                  Awaiting on HerbPharmsHub admin to approve business request
-                </AlertDescription>
-              </div>
-            </Alert>
-            <CardContent className="flex gap-5">
-              <div className="relative size-28">
+          <Card key={co.id} className="flex flex-col justify-between p-2">
+            <CardContent className="flex h-full justify-between gap-5">
+              <Badge variant={"destructive"} className="size-fit">
+                In progress
+              </Badge>
+              <div className="relative h-full flex-1">
                 <Image
                   src={co.logo?.url || ""}
                   alt={co.image?.name || ""}
                   fill
                 />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-1 flex-col">
                 <span className="text-2xl font-semibold">{co.name}</span>
-                <span>{co.description}</span>
+                <span className="line-clamp-5">{co.description}</span>
               </div>
             </CardContent>
-            <CardFooter className="flex gap-3">
-              <Button variant="outline">Cancel</Button>
-              <Button>Deploy</Button>
+            <div className="my-3 text-sm">{co.field}</div>
+            <CardFooter className="flex gap-3 p-0">
+              <Button>Contact support</Button>
             </CardFooter>
           </Card>
-        )
+        ),
       )}
     </div>
   );

@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 
 export async function addCompany(
   userId: string,
-  values: z.infer<typeof AddCompanySchema>
+  values: z.infer<typeof AddCompanySchema>,
 ) {
   const validatedFields = AddCompanySchema.safeParse(values);
 
