@@ -72,4 +72,51 @@ export const AddProductSchema = z.object({
   name: z
     .string()
     .min(2, { message: "A minimum of at least 2 characters is required" }),
+  strain: z.array(z.string()).refine((value) => value.some((item) => item), {
+    message: "You have to select at least one item.",
+  }),
+  featuredImage: z.object({
+    key: z.string(),
+    name: z.string(),
+    url: z.string(),
+    size: z.number(),
+    serverData: z.object({
+      uploadedBy: z.string(),
+    }),
+  }),
+  galleryImages: z.array(
+    z.object({
+      key: z.string(),
+      name: z.string(),
+      url: z.string(),
+      size: z.number(),
+      serverData: z.object({
+        uploadedBy: z.string(),
+      }),
+    }),
+  ),
+  price: z.coerce.number().int().min(1),
+  THCLevel: z.array(z.coerce.number()),
+  CBDLevel: z.array(z.coerce.number()),
+  grower: z
+    .string()
+    .min(2, { message: "A minimum of at least 2 characters is required" })
+    .optional(),
+  brand: z
+    .string()
+    .min(2, { message: "A minimum of at least 2 characters is required" }),
+  madeIn: z
+    .string()
+    .min(2, { message: "A minimum of at least 2 characters is required" }),
+  parent1: z
+    .string()
+    .min(2, { message: "A minimum of at least 2 characters is required" })
+    .optional(),
+  parent2: z
+    .string()
+    .min(2, { message: "A minimum of at least 2 characters is required" })
+    .optional(),
+  cultivationMethod: z
+    .string()
+    .min(2, { message: "A minimum of at least 2 characters is required" }),
 });

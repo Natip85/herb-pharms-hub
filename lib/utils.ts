@@ -74,3 +74,17 @@ export const COMPANY_FIELDS = [
   "CBD Company",
   "Cannabis Technology & Investment Group",
 ];
+export const STRAINS = [
+  {
+    id: "indica",
+    label: "Indica",
+  },
+  {
+    id: "sativa",
+    label: "Sativa",
+  },
+  {
+    id: "hybrid",
+    label: "Hybrid",
+  },
+] as const;

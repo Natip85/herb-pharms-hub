@@ -45,13 +45,13 @@ model Product {
   id                 String  @id @default(auto()) @map("_id") @db.ObjectId
   name               String
   strain             String
-  isAvailable        Boolean
+  isAvailable        Boolean @default(false)
   featuredImage      ImageType
   galleryImages      ImageType[]
   price              Int
   THCLevel           String[]
   CBDLevel           String[]
-  grower             String
+  grower             String?
   brand              String
   madeIn             String
   parent1            String?
