@@ -55,7 +55,7 @@ export default function MyBusinessesCard({
           <Card key={co.id} className="flex flex-col justify-between p-2">
             <CardContent className="flex h-full justify-between gap-5">
               <Badge variant={"destructive"} className="size-fit">
-                In progress
+                Awaiting approval{" "}
               </Badge>
               <div className="relative h-full flex-1">
                 <Image
@@ -71,7 +71,7 @@ export default function MyBusinessesCard({
             </CardContent>
             <div className="my-3 text-sm">{co.field}</div>
             <CardFooter className="flex gap-3 p-0">
-              <Button>Contact support</Button>
+              <Button variant={"outline"}>Contact support</Button>
             </CardFooter>
           </Card>
         ),
