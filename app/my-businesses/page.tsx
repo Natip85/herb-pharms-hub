@@ -21,11 +21,11 @@ export default async function MyBusinessesPage() {
   const user = await currentUser();
   if (!user?.id) {
     return (
-      <div>
-        <h1 className="text-center text-2xl md:text-4xl font-semibold">
+      <div className="flex min-h-screen flex-col gap-10 p-4 md:p-10">
+        <h1 className="text-center text-2xl font-semibold md:text-4xl">
           Log in to manage your businesses
         </h1>
-        <Alert className="flex items-center justify-between max-w-2xl mx-auto">
+        <Alert className="mx-auto flex max-w-2xl items-center justify-between">
           <RocketIcon className="size-4" />
           <div className="w-full">
             <AlertTitle>Welcome!</AlertTitle>
@@ -44,9 +44,11 @@ export default async function MyBusinessesPage() {
   const userCompanies = await getUserCompanies(user.id);
   if (!userCompanies?.companies.length) {
     return (
-      <div>
-        {" "}
-        <Alert className="flex items-center justify-between max-w-2xl mx-auto">
+      <div className="flex min-h-screen flex-col gap-5 p-4 md:p-10">
+        <h1 className="text-center text-2xl font-semibold md:text-4xl">
+          You have no regestered businesses{" "}
+        </h1>
+        <Alert className="mx-auto flex max-w-2xl items-center justify-between">
           <RocketIcon className="size-4" />
           <div className="w-full">
             <AlertTitle>Logged in as {user?.email}</AlertTitle>
@@ -57,16 +59,13 @@ export default async function MyBusinessesPage() {
           </div>
           <LogoutButton>Logout</LogoutButton>
         </Alert>
-        <h1 className="text-center text-2xl md:text-4xl font-semibold">
-          You have no regestered businesses{" "}
-        </h1>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-4 md:p-10 space-y-8">
-      <Alert className="flex items-center justify-between max-w-2xl mx-auto">
+    <div className="min-h-screen space-y-8 p-4 md:p-10">
+      <Alert className="mx-auto flex max-w-2xl items-center justify-between">
         <RocketIcon className="size-4" />
         <div className="w-full">
           <AlertTitle>Logged in as {user?.email}</AlertTitle>
@@ -77,7 +76,7 @@ export default async function MyBusinessesPage() {
         </div>
         <LogoutButton>Logout</LogoutButton>
       </Alert>
-      <h1 className="text-center text-2xl md:text-4xl font-semibold">
+      <h1 className="text-center text-2xl font-semibold md:text-4xl">
         Manage businesses
       </h1>
       <MaxWidthWrapper>

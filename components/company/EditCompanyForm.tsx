@@ -25,7 +25,14 @@ import {
 import { COMPANY_FIELDS, DAY_HOURS, DISTRICTS, cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
-import { CheckIcon, ChevronDown, ImagePlus, Loader2, X } from "lucide-react";
+import {
+  CheckIcon,
+  ChevronDown,
+  ChevronLeft,
+  ImagePlus,
+  Loader2,
+  X,
+} from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -64,6 +71,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import Link from "next/link";
 
 export default function EditCompanyForm({ company }: { company: Company }) {
   const router = useRouter();
@@ -154,9 +162,14 @@ export default function EditCompanyForm({ company }: { company: Company }) {
   form.watch();
   return (
     <MaxWidthWrapper className="p-4 md:p-10">
-      <h1 className="text-center text-2xl font-semibold md:text-4xl">
-        Edit company detials
-      </h1>
+      <div className="mb-5 flex items-center gap-3">
+        <Link href={"/my-businesses"}>
+          <ChevronLeft className="size-8" />
+        </Link>
+        <h1 className="text-center text-2xl font-semibold md:text-4xl">
+          Edit company detials
+        </h1>
+      </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
