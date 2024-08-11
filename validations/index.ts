@@ -75,17 +75,15 @@ export const AddProductSchema = z.object({
   strain: z.array(z.string()).refine((value) => value.some((item) => item), {
     message: "You have to select at least one item.",
   }),
-  featuredImage: z
-    .object({
-      key: z.string(),
-      name: z.string(),
-      url: z.string(),
-      size: z.number(),
-      serverData: z.object({
-        uploadedBy: z.string(),
-      }),
-    })
-    .optional(),
+  featuredImage: z.object({
+    key: z.string(),
+    name: z.string(),
+    url: z.string(),
+    size: z.number(),
+    serverData: z.object({
+      uploadedBy: z.string(),
+    }),
+  }),
   galleryImages: z.array(
     z.object({
       key: z.string(),

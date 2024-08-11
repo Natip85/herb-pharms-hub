@@ -24,7 +24,7 @@ import {
 } from "../ui/dialog";
 import { CheckIcon, ChevronDown, ImagePlus, X } from "lucide-react";
 import Image from "next/image";
-import { UploadButton } from "../uploadthing";
+import { UploadButton, UploadDropzone } from "../uploadthing";
 import { useState } from "react";
 import { Slider } from "../ui/slider";
 import { CULTIVATION_METHODS, STRAINS, cn } from "@/lib/utils";
@@ -61,6 +61,13 @@ export default function AddProductForm({
     useState<ImageType>();
   const [selectedGalleryImages, setSelectedGalleryImages] =
     useState<ImageType[]>();
+  console.log("GALLRYIMGS>>>", selectedGalleryImages);
+
+  const [preSelectedGalleryImages, setPreSelectedGalleryImages] = useState<
+    File[]
+  >([]);
+  console.log("PRE-GALLRYIMGS>>>", preSelectedGalleryImages);
+
   const [selectedTHCLevels, setSelectedTHCLevels] = useState([0, 0]);
   const [selectedCBDLevels, setSelectedCBDLevels] = useState([0, 0]);
   const [isImageLoading, setIsImageLoading] = useState(false);
@@ -98,6 +105,8 @@ export default function AddProductForm({
       img,
     });
   }
+
+  form.watch();
   console.log(form.watch());
 
   return (
@@ -114,108 +123,144 @@ export default function AddProductForm({
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid h-[50vh] grid-cols-2 gap-5 overflow-y-auto p-2">
-            <FormField
-              control={form.control}
-              name="featuredImage"
-              render={({ field }) => (
-                <FormItem className="flex flex-1 flex-col items-center p-2">
-                  <FormLabel htmlFor="featuredImage">Featured image</FormLabel>
-                  <FormControl>
-                    <div className="flex flex-col items-start">
-                      {selectedFeaturedImage ? (
-                        <div className="relative size-28">
-                          <X
-                            onClick={() => {
-                              // handleDeleteImage(selectedLogo);
-                              setSelectedFeaturedImage(undefined);
-                              form.setValue("featuredImage", undefined);
-                            }}
-                            className="absolute right-1 top-1 z-30 cursor-pointer text-red-500 hover:scale-105 hover:text-red-700"
-                          />
-                          <Image
-                            src={selectedFeaturedImage.url}
-                            alt="company logo"
-                            fill
-                          />
-                          image hereeee
+            <div className="col-span-2 md:flex">
+              <FormField
+                control={form.control}
+                name="featuredImage"
+                render={({ field }) => (
+                  <FormItem className="flex flex-1 flex-col items-center p-2">
+                    <FormLabel htmlFor="featuredImage">
+                      Featured image
+                    </FormLabel>
+                    <FormControl>
+                      <div className="flex flex-col items-start">
+                        {selectedFeaturedImage ? (
+                          <div className="relative size-28">
+                            <X
+                              onClick={() => {
+                                handleDeleteImage(selectedFeaturedImage);
+                                setSelectedFeaturedImage(undefined);
+                                form.control._reset();
+                              }}
+                              className="absolute right-1 top-1 z-30 cursor-pointer text-red-500 hover:scale-105 hover:text-red-700"
+                            />
+                            <Image
+                              src={selectedFeaturedImage.url}
+                              alt="company logo"
+                              fill
+                            />
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center">
+                            <ImagePlus className="mb-3 size-28 dark:text-white" />
+                            <UploadButton
+                              className="mt-4 ut-button:bg-[#1AB266] ut-button:text-black ut-allowed-content:hidden ut-button:ut-readying:bg-[#1AB266]/50"
+                              endpoint="imageUploader"
+                              onClientUploadComplete={(res) => {
+                                setSelectedFeaturedImage(res[0]);
+                                field.onChange(res[0]);
+                                setIsImageLoading(false);
+                              }}
+                              onUploadError={(error) => {
+                                alert(`ERROR! ${error.message}`);
+                              }}
+                              onUploadProgress={() => {
+                                setIsImageLoading(true);
+                              }}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="galleryImages"
+                render={({ field }) => (
+                  <FormItem className="flex flex-1 flex-col items-center p-2">
+                    <FormLabel htmlFor="galleryImages">
+                      Gallery images
+                    </FormLabel>
+                    <FormControl>
+                      <div className="flex flex-col items-center">
+                        <UploadDropzone
+                          className="h-fit flex-grow border border-secondary p-2"
+                          endpoint="galleryImagesUploader"
+                          appearance={{
+                            uploadIcon: "hidden",
+                            allowedContent: "hidden",
+                            container: "border-[#1AB266]",
+                            button: "bg-[#1AB266] cursor-pointer",
+                            label: "text-[#1AB266] hover:text-green-700",
+                          }}
+                          onClientUploadComplete={(res) => {
+                            setSelectedGalleryImages((prev) => {
+                              if (prev) {
+                                return [...prev, ...res];
+                              } else {
+                                return res;
+                              }
+                            });
+                            if (selectedGalleryImages) {
+                              field.onChange([
+                                ...selectedGalleryImages,
+                                ...res,
+                              ]);
+                            } else {
+                              field.onChange(res);
+                            }
+
+                            setPreSelectedGalleryImages([]);
+                            setIsImageLoading(false);
+                          }}
+                          onUploadError={(error: Error) => {
+                            alert(`ERROR! ${error.message}`);
+                          }}
+                          onUploadBegin={(name) => {
+                            console.log("Uploading: ", name);
+                          }}
+                          onDrop={(acceptedFiles) => {
+                            setPreSelectedGalleryImages(acceptedFiles);
+                            setIsImageLoading(true);
+                          }}
+                        />
+                        <div className="grid grid-cols-3 gap-3">
+                          {selectedGalleryImages &&
+                            selectedGalleryImages.map((img) => (
+                              <div key={img.key} className="relative size-16">
+                                <X
+                                  onClick={() => {
+                                    handleDeleteImage(img);
+                                    const filteredImages =
+                                      selectedGalleryImages.filter(
+                                        (deleted) => deleted !== img,
+                                      );
+                                    setSelectedGalleryImages(filteredImages);
+                                    if (selectedGalleryImages.length > 0) {
+                                      form.setValue(
+                                        "galleryImages",
+                                        filteredImages,
+                                      );
+                                    } else {
+                                      form.setValue("galleryImages", []);
+                                    }
+                                  }}
+                                  className="absolute right-1 top-1 z-30 cursor-pointer text-red-500 hover:scale-105 hover:text-red-700"
+                                />
+                                <Image src={img.url} alt="company logo" fill />
+                              </div>
+                            ))}
                         </div>
-                      ) : (
-                        <div className="flex flex-col items-center">
-                          <ImagePlus className="size-14 dark:text-white" />
-                          <UploadButton
-                            className="mt-4 ut-button:bg-[#1AB266] ut-button:text-black ut-allowed-content:hidden ut-button:ut-readying:bg-[#1AB266]/50"
-                            endpoint="imageUploader"
-                            onClientUploadComplete={(res) => {
-                              setSelectedFeaturedImage(res[0]);
-                              field.onChange(res[0]);
-                              setIsImageLoading(false);
-                            }}
-                            onUploadError={(error) => {
-                              alert(`ERROR! ${error.message}`);
-                            }}
-                            onUploadProgress={() => {
-                              setIsImageLoading(true);
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="galleryImages"
-              render={({ field }) => (
-                <FormItem className="flex flex-1 flex-col items-center p-2">
-                  <FormLabel htmlFor="galleryImages">Gallery images</FormLabel>
-                  <FormControl>
-                    <div className="flex flex-col items-start">
-                      {selectedGalleryImages ? (
-                        <div className="relative size-28">
-                          <X
-                            onClick={() => {
-                              // handleDeleteImage(selectedLogo);
-                              // setSelectedLogo(undefined);
-                              // form.setValue("logo", undefined);
-                            }}
-                            className="absolute right-1 top-1 z-30 cursor-pointer text-red-500 hover:scale-105 hover:text-red-700"
-                          />
-                          {/* <Image
-                            src={selectedLogo.url}
-                            alt="company logo"
-                            fill
-                          /> */}
-                          image hereeee
-                        </div>
-                      ) : (
-                        <div className="flex flex-col items-center">
-                          <ImagePlus className="size-14 dark:text-white" />
-                          <UploadButton
-                            className="mt-4 ut-button:bg-[#1AB266] ut-button:text-black ut-allowed-content:hidden ut-button:ut-readying:bg-[#1AB266]/50"
-                            endpoint="imageUploader"
-                            onClientUploadComplete={(res) => {
-                              // setSelectedLogo(res[0]);
-                              field.onChange(res[0]);
-                              // setIsImageLoading(false);
-                            }}
-                            onUploadError={(error) => {
-                              alert(`ERROR! ${error.message}`);
-                            }}
-                            onUploadProgress={() => {
-                              // setIsImageLoading(true);
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               control={form.control}
               name="name"
@@ -386,7 +431,7 @@ export default function AddProductForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel htmlFor="grower">
-                    Grower <span className="text-xs">(optional)</span>
+                    Cultivator <span className="text-xs">(optional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input id="grower" {...field} />
