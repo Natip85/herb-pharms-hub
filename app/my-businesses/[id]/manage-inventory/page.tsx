@@ -1,7 +1,15 @@
 import AddProductForm from "@/components/inventory/AddProductForm";
+import { DataTable } from "@/components/inventory/ProductDataTable";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import db from "@/db/db";
 import { ChevronLeft, Plus } from "lucide-react";
 import Link from "next/link";
@@ -17,11 +25,12 @@ export default async function ManageInventoryPage({
   params: { id: string };
 }) {
   const company = await getCompany(id);
+  const products = await db.product.findMany({ where: { companyId: id } });
   if (!company) {
     redirect("/my-businesses");
   }
   return (
-    <MaxWidthWrapper className="min-h-screen py-4 md:py-10">
+    <MaxWidthWrapper className="flex min-h-screen flex-col gap-10 py-4 md:py-10">
       <div className="flex flex-col gap-3 md:flex-row md:justify-between">
         <div className="flex items-center gap-3">
           <Link href={"/my-businesses"}>
@@ -38,8 +47,23 @@ export default async function ManageInventoryPage({
               Add inventory
             </Button>
           </DialogTrigger>
-          <AddProductForm company={company} />
+          <DialogContent>
+            <DialogHeader className="px-2">
+              <DialogTitle>
+                Add new inventory to{" "}
+                <span className="text-[#1AB266]">{company.name}</span>
+              </DialogTitle>
+              <DialogDescription>
+                Add new inventory to your company. This will be visible to all
+                users.
+              </DialogDescription>
+            </DialogHeader>
+            <AddProductForm company={company} />
+          </DialogContent>
         </Dialog>
+      </div>
+      <div>
+        <DataTable products={products} />
       </div>
     </MaxWidthWrapper>
   );

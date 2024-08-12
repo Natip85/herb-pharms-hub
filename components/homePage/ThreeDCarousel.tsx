@@ -1,5 +1,5 @@
 "use client";
-import useMediaQuery from "@/hooks/useMediaQuery";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import {
   PanInfo,
   motion,
@@ -47,19 +47,19 @@ export default function ThreeDCarousel() {
   });
   return (
     <>
-      <div className="relative w-full mb-5">
-        <div className="size-0.5 bg-black dark:bg-white min-w-96 mx-auto" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-1 bg-background">
+      <div className="relative mb-5 w-full">
+        <div className="mx-auto size-0.5 min-w-96 bg-black dark:bg-white" />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform bg-background p-1">
           <Image src={"/logo.png"} alt="logo" width={30} height={30} />
         </div>
       </div>
-      <h1 className="text-2xl md:text-4xl font-bold text-center">
+      <h1 className="text-center text-2xl font-bold md:text-4xl">
         Some of our top brands
       </h1>
 
-      <div className="relative h-[200px] md:h-[300px] w-full overflow-hidden">
+      <div className="relative h-[200px] w-full overflow-hidden md:h-[300px]">
         <div
-          className="flex h-full items-center justify-center bg-mauve-dark-2"
+          className="bg-mauve-dark-2 flex h-full items-center justify-center"
           style={{
             perspective: "1000px",
             transformStyle: "preserve-3d",
@@ -94,7 +94,7 @@ export default function ThreeDCarousel() {
                   <img
                     src={url}
                     alt="img"
-                    className="pointer-events-none h-12 w-full rounded-xl object-cover md:h-32 bg-secondary"
+                    className="pointer-events-none h-12 w-full rounded-xl bg-secondary object-cover md:h-32"
                   />
                 </div>
               );

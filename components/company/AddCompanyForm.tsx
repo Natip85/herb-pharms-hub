@@ -144,7 +144,7 @@ export default function AddCompanyForm() {
             });
           }
         })
-        .catch(() => console.log("Something went wrong at login"));
+        .catch(() => console.log("Something went wrong at add company form"));
     });
   };
 

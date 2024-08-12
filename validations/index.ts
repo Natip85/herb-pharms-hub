@@ -100,8 +100,7 @@ export const AddProductSchema = z.object({
   CBDLevel: z.array(z.coerce.number()),
   grower: z
     .string()
-    .min(2, { message: "A minimum of at least 2 characters is required" })
-    .optional(),
+    .min(2, { message: "A minimum of at least 2 characters is required" }),
   brand: z
     .string()
     .min(2, { message: "A minimum of at least 2 characters is required" }),
@@ -110,12 +109,10 @@ export const AddProductSchema = z.object({
     .min(2, { message: "A minimum of at least 2 characters is required" }),
   parent1: z
     .string()
-    .min(2, { message: "A minimum of at least 2 characters is required" })
-    .optional(),
+    .min(2, { message: "A minimum of at least 2 characters is required" }),
   parent2: z
     .string()
-    .min(2, { message: "A minimum of at least 2 characters is required" })
-    .optional(),
+    .min(2, { message: "A minimum of at least 2 characters is required" }),
   cultivationMethod: z
     .string()
     .min(2, { message: "A minimum of at least 2 characters is required" }),

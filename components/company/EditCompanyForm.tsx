@@ -156,7 +156,7 @@ export default function EditCompanyForm({ company }: { company: Company }) {
             router.refresh();
           }
         })
-        .catch(() => console.log("Something went wrong at edit company"));
+        .catch(() => console.log("Something went wrong at delete company"));
     });
   }
   form.watch();
