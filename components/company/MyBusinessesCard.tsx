@@ -40,7 +40,7 @@ export default function MyBusinessesCard({
                   href={`/my-businesses/${co.id}/edit`}
                   className={buttonVariants({ variant: "outline" })}
                 >
-                  Edit comapny details
+                  Edit company details
                 </Link>
               </div>
               <Link

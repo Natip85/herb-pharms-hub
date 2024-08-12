@@ -6,7 +6,10 @@ export default async function EditPage({
 }: {
   params: { id: string };
 }) {
-  const company = await db.company.findUnique({ where: { id } });
+  const company = await db.company.findUnique({
+    where: { id },
+    include: { products: true },
+  });
   if (!company) return;
   return (
     <div>

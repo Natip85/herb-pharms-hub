@@ -1,6 +1,6 @@
 "use client";
 import { AddCompanySchema } from "@/validations";
-import { Company, ImageType } from "@prisma/client";
+import { Company, ImageType, Product } from "@prisma/client";
 import * as z from "zod";
 import {
   Form,
@@ -72,8 +72,13 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import Link from "next/link";
-
-export default function EditCompanyForm({ company }: { company: Company }) {
+interface EditCompanyFormProps {
+  company: CompanyWithProducts;
+}
+export type CompanyWithProducts = Company & {
+  products: Product[];
+};
+export default function EditCompanyForm({ company }: EditCompanyFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
@@ -136,29 +141,56 @@ export default function EditCompanyForm({ company }: { company: Company }) {
     });
   }
   async function handleDeleteCompany(companyId: string) {
-    startTransition(() => {
-      deleteCompany(companyId)
-        .then((data) => {
-          if (data.error) {
-            toast({
-              title: "Error",
-              description: `${data.error}`,
-              variant: "destructive",
-            });
-            router.refresh();
-          } else {
-            toast({
-              title: "Success",
-              description: `${data.success}`,
-              variant: "success",
-            });
-            router.push("/my-businesses");
-            router.refresh();
-          }
-        })
-        .catch(() => console.log("Something went wrong at delete company"));
-    });
+    try {
+      startTransition(async () => {
+        const companyProductGalleryImages = company.products.flatMap(
+          (product) => product.galleryImages.map((image) => image.key),
+        );
+
+        const companyProductFeaturedImages = company.products
+          .map((product) => product.featuredImage?.key)
+          .filter(Boolean);
+
+        const allImageKeys = [
+          company.image?.key,
+          company.logo?.key,
+          ...companyProductGalleryImages,
+          ...companyProductFeaturedImages,
+        ].filter(Boolean);
+
+        await axios.post("/api/uploadthing/deleteMany", {
+          imageKeys: allImageKeys,
+        });
+
+        const response = await deleteCompany(companyId);
+
+        if (response.error) {
+          toast({
+            title: "Error",
+            description: response.error,
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Success",
+            description: response.success,
+            variant: "success",
+          });
+          router.push("/my-businesses");
+        }
+
+        router.refresh();
+      });
+    } catch (error) {
+      console.error("Error deleting company:", error);
+      toast({
+        title: "Error",
+        description: "Something went wrong while deleting the company.",
+        variant: "destructive",
+      });
+    }
   }
+
   form.watch();
   return (
     <MaxWidthWrapper className="p-4 md:p-10">
@@ -591,7 +623,6 @@ export default function EditCompanyForm({ company }: { company: Company }) {
                     {isPending ? (
                       <>
                         <Loader2 className="mr-2 animate-spin" /> Deleting
-                        company
                       </>
                     ) : (
                       "Delete"

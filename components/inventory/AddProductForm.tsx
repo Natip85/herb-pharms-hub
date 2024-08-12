@@ -245,6 +245,33 @@ export default function AddProductForm({
                   <FormLabel htmlFor="galleryImages">Gallery images</FormLabel>
                   <FormControl>
                     <div className="flex flex-col items-center">
+                      <div className="grid grid-cols-3 gap-3">
+                        {selectedGalleryImages &&
+                          selectedGalleryImages.map((img) => (
+                            <div key={img.key} className="relative size-16">
+                              <X
+                                onClick={() => {
+                                  handleDeleteImage(img);
+                                  const filteredImages =
+                                    selectedGalleryImages.filter(
+                                      (deleted) => deleted !== img,
+                                    );
+                                  setSelectedGalleryImages(filteredImages);
+                                  if (selectedGalleryImages.length > 0) {
+                                    form.setValue(
+                                      "galleryImages",
+                                      filteredImages,
+                                    );
+                                  } else {
+                                    form.setValue("galleryImages", []);
+                                  }
+                                }}
+                                className="absolute right-1 top-1 z-30 cursor-pointer text-red-500 hover:scale-105 hover:text-red-700"
+                              />
+                              <Image src={img.url} alt="company logo" fill />
+                            </div>
+                          ))}
+                      </div>
                       <UploadDropzone
                         className="h-fit flex-grow border border-secondary p-2"
                         endpoint="galleryImagesUploader"
@@ -281,33 +308,6 @@ export default function AddProductForm({
                           setIsImageLoading(true);
                         }}
                       />
-                      <div className="grid grid-cols-3 gap-3">
-                        {selectedGalleryImages &&
-                          selectedGalleryImages.map((img) => (
-                            <div key={img.key} className="relative size-16">
-                              <X
-                                onClick={() => {
-                                  handleDeleteImage(img);
-                                  const filteredImages =
-                                    selectedGalleryImages.filter(
-                                      (deleted) => deleted !== img,
-                                    );
-                                  setSelectedGalleryImages(filteredImages);
-                                  if (selectedGalleryImages.length > 0) {
-                                    form.setValue(
-                                      "galleryImages",
-                                      filteredImages,
-                                    );
-                                  } else {
-                                    form.setValue("galleryImages", []);
-                                  }
-                                }}
-                                className="absolute right-1 top-1 z-30 cursor-pointer text-red-500 hover:scale-105 hover:text-red-700"
-                              />
-                              <Image src={img.url} alt="company logo" fill />
-                            </div>
-                          ))}
-                      </div>
                     </div>
                   </FormControl>
                   <FormMessage />

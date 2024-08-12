@@ -668,7 +668,6 @@ export default function AddCompanyForm() {
                     alt="company logo"
                     width={150}
                     height={200}
-                    className="border border-white shadow-md shadow-black"
                   />
 
                   <h3 className="text-2xl font-bold md:text-4xl">
