@@ -17,18 +17,18 @@ export default function MyBusinessesCard({
       {companies.map((co) =>
         co.isCompanyVerified ? (
           <Card key={co.id} className="flex flex-col justify-between p-2">
-            <CardContent className="flex h-full justify-between gap-5">
+            <CardContent className="flex h-full justify-between gap-3">
               <Badge variant={"success"} className="size-fit">
                 Active
               </Badge>
-              <div className="relative h-full flex-1">
+              <div className="relative size-24">
                 <Image
                   src={co.logo?.url || ""}
                   alt={co.image?.name || ""}
                   fill
                 />
               </div>
-              <div className="flex flex-1 flex-col">
+              <div className="flex flex-col">
                 <span className="text-2xl font-semibold">{co.name}</span>
                 <span className="line-clamp-5">{co.description}</span>
               </div>
@@ -40,14 +40,14 @@ export default function MyBusinessesCard({
                   href={`/my-businesses/${co.id}/edit`}
                   className={buttonVariants({ variant: "outline" })}
                 >
-                  Edit company details
+                  Edit company info
                 </Link>
               </div>
               <Link
                 href={`/my-businesses/${co.id}/manage-inventory`}
                 className={buttonVariants()}
               >
-                Manage inventory
+                Manage stock
               </Link>
             </CardFooter>
           </Card>
