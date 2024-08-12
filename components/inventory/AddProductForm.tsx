@@ -25,7 +25,7 @@ import {
 import { CheckIcon, ChevronDown, ImagePlus, X } from "lucide-react";
 import Image from "next/image";
 import { UploadButton, UploadDropzone } from "../uploadthing";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Slider } from "../ui/slider";
 import { CULTIVATION_METHODS, STRAINS, cn } from "@/lib/utils";
 import { Checkbox } from "../ui/checkbox";
@@ -48,6 +48,9 @@ import {
   CommandList,
 } from "../ui/command";
 import axios from "axios";
+import { addProduct } from "@/actions/products/addProduct";
+import { useToast } from "../ui/use-toast";
+import { useRouter } from "next/navigation";
 
 interface AddProductFormProps {
   product?: Product;
@@ -57,20 +60,22 @@ export default function AddProductForm({
   product,
   company,
 }: AddProductFormProps) {
+  const router = useRouter();
+  const { toast } = useToast();
   const [selectedFeaturedImage, setSelectedFeaturedImage] =
     useState<ImageType>();
   const [selectedGalleryImages, setSelectedGalleryImages] =
     useState<ImageType[]>();
-  console.log("GALLRYIMGS>>>", selectedGalleryImages);
 
   const [preSelectedGalleryImages, setPreSelectedGalleryImages] = useState<
     File[]
   >([]);
-  console.log("PRE-GALLRYIMGS>>>", preSelectedGalleryImages);
 
   const [selectedTHCLevels, setSelectedTHCLevels] = useState([0, 0]);
   const [selectedCBDLevels, setSelectedCBDLevels] = useState([0, 0]);
   const [isImageLoading, setIsImageLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
   const countries = Country.getAllCountries();
 
   const handleTHCLevelChange = (newValues: any) => {
@@ -85,20 +90,41 @@ export default function AddProductForm({
       name: "",
       strain: [],
       featuredImage: undefined,
-      galleryImages: [],
+      galleryImages: undefined,
       price: 0,
       THCLevel: undefined,
       CBDLevel: undefined,
-      grower: "",
+      grower: undefined,
       brand: "",
       madeIn: "",
-      parent1: "",
-      parent2: "",
+      parent1: undefined,
+      parent2: undefined,
       cultivationMethod: "",
     },
   });
   const onSubmit = async (data: z.infer<typeof AddProductSchema>) => {
     console.log("DATA>>>", data);
+    startTransition(() => {
+      addProduct(company.id, data)
+        .then((data) => {
+          if (data.error) {
+            toast({
+              title: "Error",
+              description: `${data.error}`,
+              variant: "destructive",
+            });
+            router.refresh();
+          } else {
+            toast({
+              title: "Success",
+              description: `${data.success}`,
+              variant: "success",
+            });
+            router.refresh();
+          }
+        })
+        .catch(() => console.log("Something went wrong at login"));
+    });
   };
   async function handleDeleteImage(img: ImageType) {
     await axios.post("/api/uploadthing/delete", {
@@ -219,9 +245,7 @@ export default function AddProductForm({
                           onUploadError={(error: Error) => {
                             alert(`ERROR! ${error.message}`);
                           }}
-                          onUploadBegin={(name) => {
-                            console.log("Uploading: ", name);
-                          }}
+                          onUploadBegin={(name) => {}}
                           onDrop={(acceptedFiles) => {
                             setPreSelectedGalleryImages(acceptedFiles);
                             setIsImageLoading(true);

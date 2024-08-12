@@ -41,7 +41,7 @@ import {
 } from "lucide-react";
 import { UploadButton } from "../uploadthing";
 import { useState, useTransition } from "react";
-import { Company, ImageType } from "@prisma/client";
+import { ImageType } from "@prisma/client";
 import Image from "next/image";
 import axios from "axios";
 import { City } from "country-state-city";
