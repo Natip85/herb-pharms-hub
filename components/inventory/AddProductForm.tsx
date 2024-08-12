@@ -64,8 +64,6 @@ export default function AddProductForm({
   company,
   isEditOpen,
 }: AddProductFormProps) {
-  console.log("THE PROD>>>>", product);
-
   const router = useRouter();
   const { toast } = useToast();
   const [selectedFeaturedImage, setSelectedFeaturedImage] =

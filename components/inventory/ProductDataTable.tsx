@@ -33,6 +33,7 @@ import { ChevronDown } from "lucide-react";
 
 import { columns } from "./columns";
 import { Product } from "@prisma/client";
+import Image from "next/image";
 
 export function DataTable({ products }: { products: Product[] }) {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -140,7 +141,14 @@ export function DataTable({ products }: { products: Product[] }) {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  No products found.
+                  <div className="relative mx-auto size-96">
+                    <Image
+                      src={"/noFoundProducts.png"}
+                      alt="no products found"
+                      fill
+                    />
+                  </div>
                 </TableCell>
               </TableRow>
             )}
