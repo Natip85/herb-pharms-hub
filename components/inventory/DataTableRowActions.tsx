@@ -93,7 +93,7 @@ export function DataTableRowActions({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="z-50 w-[160px]">
           <DropdownMenuItem asChild>
-            <Link href={"/"}>View</Link>
+            <Link href={`/product/${row.original.id}`}>View</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <button
