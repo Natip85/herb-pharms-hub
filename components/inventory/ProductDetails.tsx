@@ -16,10 +16,14 @@ export default function ProductDetails({
       <div className="flex flex-col gap-5 md:flex-row">
         <div className="flex-1 flex-shrink-0 overflow-hidden">
           <ReactImageSlider
-            images={product.galleryImages.map((img) => ({
-              original: img.url,
-              thumbnail: img.url,
-            }))}
+            images={
+              product
+                ? product.galleryImages.map((img) => ({
+                    original: img.url,
+                    thumbnail: img.url,
+                  }))
+                : []
+            }
           />
         </div>
         <div className="flex-1">
