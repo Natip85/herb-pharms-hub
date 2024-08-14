@@ -72,6 +72,9 @@ export const AddProductSchema = z.object({
   name: z
     .string()
     .min(2, { message: "A minimum of at least 2 characters is required" }),
+  description: z
+    .string()
+    .min(10, { message: "A minimum of at least 10 characters is required" }),
   strain: z.array(z.string()).refine((value) => value.some((item) => item), {
     message: "You have to select at least one item.",
   }),

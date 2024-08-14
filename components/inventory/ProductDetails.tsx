@@ -16,7 +16,6 @@ export default function ProductDetails({
 }: {
   product: Product | null;
 }) {
-  console.log("PROD>>>", product);
   if (!product) return;
 
   return (
@@ -56,14 +55,15 @@ export default function ProductDetails({
           </div>
           <Accordion type="single" collapsible>
             <AccordionItem value="item-1">
-              <AccordionTrigger>Description</AccordionTrigger>
-              <AccordionContent>
-                Yes. It&apos;s animated by default, but you can disable it if
-                you prefer.
-              </AccordionContent>
+              <AccordionTrigger className="underline">
+                Description
+              </AccordionTrigger>
+              <AccordionContent>{product.description}</AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-2">
-              <AccordionTrigger>Cultivar facts</AccordionTrigger>
+              <AccordionTrigger className="underline">
+                Cultivar facts
+              </AccordionTrigger>
               <AccordionContent className="flex flex-col gap-2">
                 <div className="flex justify-between">
                   <span className="font-semibold">Strain type</span>
@@ -83,8 +83,10 @@ export default function ProductDetails({
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-3">
-              <AccordionTrigger>Grow facts</AccordionTrigger>
-              <AccordionContent>
+              <AccordionTrigger className="underline">
+                Grow facts
+              </AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-2">
                 <div className="flex justify-between">
                   <span className="font-semibold">Location</span>
                   <span>{product.madeIn}</span>

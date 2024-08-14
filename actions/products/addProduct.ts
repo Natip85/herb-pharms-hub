@@ -26,6 +26,7 @@ export async function addProduct(
   try {
     const {
       name,
+      description,
       strain,
       featuredImage,
       galleryImages,
@@ -43,6 +44,7 @@ export async function addProduct(
     await db.product.create({
       data: {
         name,
+        description,
         strain,
         featuredImage,
         galleryImages,

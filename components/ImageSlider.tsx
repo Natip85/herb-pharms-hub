@@ -15,8 +15,6 @@ export default function ImageSlider({
 }: {
   images: string[] | undefined;
 }) {
-  console.log("IMAGES>>>", images);
-
   const [swiper, setSwiper] = useState<null | SwiperType>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 

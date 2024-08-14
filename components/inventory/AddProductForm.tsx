@@ -52,6 +52,7 @@ import { addProduct } from "@/actions/products/addProduct";
 import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
 import { editProduct } from "@/actions/products/editProduct";
+import { Textarea } from "../ui/textarea";
 
 interface AddProductFormProps {
   product?: Product;
@@ -96,6 +97,7 @@ export default function AddProductForm({
     resolver: zodResolver(AddProductSchema),
     defaultValues: product || {
       name: "",
+      description: "",
       strain: [],
       featuredImage: undefined,
       galleryImages: undefined,
@@ -248,7 +250,7 @@ export default function AddProductForm({
                       <div className="grid grid-cols-3 gap-3">
                         {selectedGalleryImages &&
                           selectedGalleryImages.map((img) => (
-                            <div key={img.key} className="relative size-16">
+                            <div key={img.key} className="relative size-20">
                               <X
                                 onClick={() => {
                                   handleDeleteImage(img);
@@ -323,6 +325,19 @@ export default function AddProductForm({
                 <FormLabel htmlFor="name">Name</FormLabel>
                 <FormControl>
                   <Input id="name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem className="col-span-2">
+                <FormLabel htmlFor="name">Description</FormLabel>
+                <FormControl>
+                  <Textarea cols={10} id="name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

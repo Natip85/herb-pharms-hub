@@ -26,6 +26,7 @@ export async function editProduct(
   try {
     const {
       name,
+      description,
       strain,
       featuredImage,
       galleryImages,
@@ -48,6 +49,7 @@ export async function editProduct(
       where: { id: productId },
       data: {
         name,
+        description,
         strain,
         featuredImage,
         galleryImages,

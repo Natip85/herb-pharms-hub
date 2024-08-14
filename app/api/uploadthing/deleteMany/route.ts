@@ -5,7 +5,6 @@ const utapi = new UTApi();
 
 export async function POST(req: Request) {
   const { imageKeys } = await req.json();
-  console.log("IMGKEYS");
 
   try {
     if (!Array.isArray(imageKeys)) {
