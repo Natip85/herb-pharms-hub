@@ -17,13 +17,12 @@ export default function ImageSlider({
 }) {
   console.log("IMAGES>>>", images);
 
-  if (!images) return;
   const [swiper, setSwiper] = useState<null | SwiperType>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const [slideConfig, setSlideConfig] = useState({
     isBeginning: true,
-    isEnd: activeIndex === (images.length ?? 0) - 1,
+    isEnd: activeIndex === (images ? (images.length ?? 0) : 0) - 1,
   });
 
   useEffect(() => {
@@ -31,7 +30,7 @@ export default function ImageSlider({
       setActiveIndex(activeIndex);
       setSlideConfig({
         isBeginning: activeIndex === 0,
-        isEnd: activeIndex === (images.length ?? 0) - 1,
+        isEnd: activeIndex === (images ? (images.length ?? 0) : 0) - 1,
       });
     });
   }, [swiper, images]);
@@ -83,7 +82,7 @@ export default function ImageSlider({
         slidesPerView={1}
         className="size-full"
       >
-        {images.map((url, i) => (
+        {images?.map((url, i) => (
           <SwiperSlide key={i} className="relative size-full">
             <Image
               fill
