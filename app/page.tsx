@@ -6,6 +6,7 @@ import StatementSection from "@/components/homePage/StatementSection";
 import ThreeDCarousel from "@/components/homePage/ThreeDCarousel";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 const words = [
   "medicinal oils",
   "the best strands",
@@ -31,18 +32,22 @@ export default function HomePage() {
   return (
     <div className="min-h-screen">
       <div className="relative md:-mt-20">
-        <div className="z-30 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-5 md:gap-7">
-          <h1 className="text-2xl md:text-4xl font-bold text-center">
+        <div className="absolute left-1/2 top-1/2 z-30 flex -translate-x-1/2 -translate-y-1/2 transform flex-col items-center gap-5 md:gap-7">
+          <h1 className="text-center text-2xl font-bold md:text-4xl">
             On HerbPharmsHub you get{" "}
             <HeroTextLoop words={words} duration={2000} />
           </h1>
-          <p className="text-sm md:text-lg font-semibold text-center">
+          <p className="text-center text-sm font-semibold md:text-lg">
             Your one stop for the best pharmacies and cannabis strands
           </p>
           <div className="flex items-center justify-center gap-10">
-            <Button>Join now</Button>
-            <Button variant={"outline"} className="flex items-center gap-2">
-              Find stock <ArrowRight />
+            <Button className="flex items-center gap-2" asChild>
+              <Link href={"/add-business"}>
+                Join now <ArrowRight />
+              </Link>
+            </Button>
+            <Button variant={"outline"} asChild>
+              <Link href={"/stock-locator"}>Find stock</Link>
             </Button>
           </div>
         </div>
@@ -57,7 +62,7 @@ export default function HomePage() {
       <div className="p-10">
         <ThreeDCarousel />
       </div>
-      <div className="p-4 bg-secondary">
+      <div className="bg-secondary p-4">
         <FAQAccordion />
       </div>
     </div>

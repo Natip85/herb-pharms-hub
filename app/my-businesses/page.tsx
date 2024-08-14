@@ -46,14 +46,14 @@ export default async function MyBusinessesPage() {
     return (
       <div className="flex min-h-screen flex-col gap-5 p-4 md:p-10">
         <h1 className="text-center text-2xl font-semibold md:text-4xl">
-          You have no regestered businesses{" "}
+          You have no registered businesses{" "}
         </h1>
         <Alert className="mx-auto flex max-w-2xl items-center justify-between">
           <RocketIcon className="size-4" />
           <div className="w-full">
             <AlertTitle>Logged in as {user?.email}</AlertTitle>
             <AlertDescription>
-              Create and submit your account for{" "}
+              Create and submit your business for{" "}
               <span className="text-[#1AB266]">HerbPharmsHub</span> approval
             </AlertDescription>
           </div>

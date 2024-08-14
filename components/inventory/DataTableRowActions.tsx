@@ -93,9 +93,6 @@ export function DataTableRowActions({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="z-50 w-[160px]">
           <DropdownMenuItem asChild>
-            <Link href={`/product/${row.original.id}`}>View</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
             <button
               onClick={() => {
                 setIsEditOpen(true);
@@ -104,6 +101,9 @@ export function DataTableRowActions({
             >
               Edit
             </button>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href={`/product/${row.original.id}`}>View</Link>
           </DropdownMenuItem>
           <DropdownMenuItem
             disabled={isPending}

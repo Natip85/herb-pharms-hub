@@ -190,7 +190,7 @@ export default function AddCompanyForm() {
         <div className="w-full">
           <AlertTitle>Logged in as {user?.email}</AlertTitle>
           <AlertDescription>
-            Create and submit your account for{" "}
+            Create and submit your business for{" "}
             <span className="text-[#1AB266]">HerbPharmsHub</span> approval
           </AlertDescription>
         </div>

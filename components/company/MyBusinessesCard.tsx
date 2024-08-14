@@ -53,7 +53,7 @@ export default function MyBusinessesCard({
               </Link>
               <Link
                 href={`/my-businesses/${co.id}/manage-inventory`}
-                className={`relative ${buttonVariants()}`}
+                className={`relative ${buttonVariants({ variant: "outline" })}`}
               >
                 Manage stock
               </Link>{" "}
